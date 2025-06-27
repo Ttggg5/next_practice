@@ -44,7 +44,6 @@ const ProfileView: React.FC<Props> = ({ userId }) => {
   return (
     <div>
       <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${userId}`} width={200} alt="avatar" />
-      <UploadAvatar userId={userId as string}></UploadAvatar>
       <h2>{profile.username}</h2>
       {profile.bio && <p>{profile.bio}</p>}
       {profile.location && <p>{profile.location}</p>}
