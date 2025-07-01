@@ -64,7 +64,7 @@ export default function PageNavBar() {
         </li>
 
         <li className={pagesIcon.profile}>
-          <Link href={loginRespon?.isLoggedIn ? `/profile/${loginRespon?.userId}` : "/login"} onClick={e => setPagesIcon({home: "", notification: "", chat: "", profile: "selected"})}>
+          <Link href={loginRespon?.isLoggedIn ? `/profile/${loginRespon?.userId}` : "/login"} onClick={e => loginRespon?.isLoggedIn ? setPagesIcon({home: "", notification: "", chat: "", profile: "selected"}) : setPagesIcon({home: "", notification: "", chat: "", profile: ""})}>
             <img src={loginRespon?.isLoggedIn ? `${process.env.serverBaseUrl}/api/profile/avatar/${loginRespon?.userId}` : "/user-solid.svg"} alt="Profile" width={nav_icon_size} height={nav_icon_size} />
           </Link>
         </li>

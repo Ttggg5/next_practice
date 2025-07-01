@@ -42,7 +42,7 @@ a {
 }
 
 .page-nav {
-  position: absolute;
+  position: fixed;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
@@ -67,10 +67,6 @@ a {
 
 .page-nav ul li:hover {
   background: #b4b4b4;
-}
-
-.page-nav ul li a {
-  
 }
 
 .page-nav ul li a img {

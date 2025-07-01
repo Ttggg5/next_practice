@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import styles from "./page.module.css";
+import Link from 'next/link';
 
 export default function Page() {
   const [loginInfo, setLoginInfo] = useState({ email: '', password: '' });
@@ -31,7 +32,8 @@ export default function Page() {
         <input type="email" placeholder="Email" onChange={e => setLoginInfo({ ...loginInfo, email: e.target.value })} required />
         <input type="password" placeholder="Password" onChange={e => setLoginInfo({ ...loginInfo, password: e.target.value })} required />
         <button type="submit" disabled={btnDisabled}>Login</button>
-        <a href='/forgot-password'>forgot password</a>
+        <Link href='/forgot-password'>forgot password</Link>
+        <Link href='/register'>register</Link>
       </form>
     </>
   );
