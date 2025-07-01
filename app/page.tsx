@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from 'next/link'
 import styles from "./page.module.css";
 import React, { useCallback, useEffect, useState } from 'react';
+import Loading from "@/app/loading";
 
 interface Post {
   id: string;
@@ -64,7 +65,7 @@ export default function Home() {
             <small>{new Date(post.created_at).toLocaleString()}</small>
           </div>
         ))}
-        {loading && <p>Loading more...</p>}
+        {loading && <Loading></Loading>}
         {!hasMore && <p style={{ textAlign: 'center' }}>No more posts.</p>}
       </div>
     </div>
