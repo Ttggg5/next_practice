@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  align-items: center;
+  color: var(--background);
+  margin: 0 15px;
+}
+
+.btn {
+  width: 20px;
+  color: var(--background);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: #ff5d5ddd;
+}
+
+.pressed {
+  color: #ff5d5ddd;
+}
+
+.likeCount {
+  margin-left: 5px;
+}

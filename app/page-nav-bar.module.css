@@ -1,0 +1,37 @@
+.pageNav {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px;
+  background: var(--foreground);
+  border-radius: 100px;
+}
+
+.pageNav ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pageNav ul li {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 100px;
+  transition: all 0.3s;
+}
+
+.pageNav ul li:hover {
+  background: #b4b4b4;
+}
+
+.pageNav ul li a img {
+  border-radius: 100px;
+  padding: 10px;
+  padding-bottom: 6px;
+}
+
+.selected {
+  background: #b4b4b4;
+}

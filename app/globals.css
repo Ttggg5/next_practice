@@ -41,49 +41,11 @@ a {
   }
 }
 
-.page-nav {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 5px;
-  background: var(--foreground);
-  border-radius: 100px;
-}
-
-.page-nav ul {
-  display: flex;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.page-nav ul li {
-  margin-left: 5px;
-  margin-right: 5px;
-  border-radius: 100px;
-  transition: all 0.3s;
-}
-
-.page-nav ul li:hover {
-  background: #b4b4b4;
-}
-
-.page-nav ul li a img {
-  border-radius: 100px;
-  padding: 10px;
-  padding-bottom: 6px;
-}
-
-.selected {
-  background: #b4b4b4;
-}
-
 .loader {
   width: 30px;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 8px solid;
+  border: 5px solid;
   border-color: var(--foreground) var(--background);
   animation: l1 1s infinite;
 }
