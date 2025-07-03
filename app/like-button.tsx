@@ -6,11 +6,10 @@ import styles from './like-button.module.css';
 interface Props {
   isUserLogin: boolean;
   count: number;
-  userId: string | null;
   postId: string;
 }
 
-const LikeButton: React.FC<Props> = ({isUserLogin, count, userId, postId}) => {
+const LikeButton: React.FC<Props> = ({isUserLogin, count, postId}) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(count);
   const fetchedRef = useRef(false); // ✅ block duplicate fetch
@@ -20,7 +19,7 @@ const LikeButton: React.FC<Props> = ({isUserLogin, count, userId, postId}) => {
     fetchedRef.current = true;
 
     if (isUserLogin){
-      fetch(`${process.env.serverBaseUrl}/api/posts/${postId}/isLiked`, { credentials: 'include' })
+      fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${postId}/isLiked`, { credentials: 'include' })
         .then(async (res) => {
           if (!res.ok)
             throw new Error('Failed to fetch user');
@@ -34,10 +33,10 @@ const LikeButton: React.FC<Props> = ({isUserLogin, count, userId, postId}) => {
 
   return (
     <div className={styles.container}>
-      <button className={isLiked ? `${styles.btn} ${styles.pressed}`: styles.btn} onClick={e => {
+      <button className={isLiked ? `${styles.btn} ${styles.pressed}`: styles.btn} onClick={() => {
         if (isUserLogin) {
           if (isLiked){
-            fetch(`${process.env.serverBaseUrl}/api/posts/${postId}/unlike`, { 
+            fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${postId}/unlike`, { 
               credentials: 'include',
               method: 'POST',
               headers: { 'Content-Type': 'application/json' }
@@ -55,7 +54,7 @@ const LikeButton: React.FC<Props> = ({isUserLogin, count, userId, postId}) => {
               });
           }
           else {
-            fetch(`${process.env.serverBaseUrl}/api/posts/${postId}/like`, { 
+            fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${postId}/like`, { 
               credentials: 'include',
               method: 'POST',
               headers: { 'Content-Type': 'application/json' }

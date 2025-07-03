@@ -17,7 +17,7 @@ const ResetPassword: React.FC<Props> = ({ token }) => {
         return;
     }
 
-    const res = await fetch(`${process.env.serverBaseUrl}/api/auth/reset-password`, {
+    const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/reset-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, password }),

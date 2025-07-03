@@ -21,7 +21,7 @@ const VerifyEmail: React.FC<Props> = ({ token }) => {
 
     const verify = async () => {
       try {
-        const res = await fetch(`${process.env.serverBaseUrl}/api/auth/verify-email?token=${token}`, {
+        const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/verify-email?token=${token}`, {
           method: 'GET',
           credentials: 'include'
         });
@@ -33,7 +33,7 @@ const VerifyEmail: React.FC<Props> = ({ token }) => {
         } else {
           setMessage(`❌ Verification failed: ${data.message}`);
         }
-      } catch (err) {
+      } catch {
         setMessage('❌ An error occurred during verification.');
       }
     };

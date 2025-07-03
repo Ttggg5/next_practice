@@ -26,7 +26,7 @@ const ProfileView: React.FC<Props> = ({ userId }) => {
     }
 
     // Fetch user profile by ID
-    fetch(`${process.env.serverBaseUrl}/api/profile/${userId}`, { credentials: 'include' })
+    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/profile/${userId}`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok) {
           const data = await res.json();
@@ -43,7 +43,7 @@ const ProfileView: React.FC<Props> = ({ userId }) => {
 
   return (
     <div>
-      <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${userId}`} width={200} alt="avatar" />
+      <img src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${userId}`} width={200} alt="avatar" />
       <UploadAvatar userId={userId}></UploadAvatar>
       <h2>{profile.username}</h2>
       {profile.bio && <p>{profile.bio}</p>}

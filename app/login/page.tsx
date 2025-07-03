@@ -9,7 +9,7 @@ export default function Page() {
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   const handleLogin = async () => {
-    const res = await fetch(`${process.env.serverBaseUrl}/api/auth/login`, {
+    const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include', // 🔐 important

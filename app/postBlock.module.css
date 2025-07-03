@@ -1,0 +1,75 @@
+.post {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.post > small {
+  align-self: flex-end;
+  color: gray;
+  margin-top: 10px;
+}
+
+.post > p {
+  margin: 10px 30px 0 30px;
+  overflow-wrap: break-word;
+}
+
+.postUser {
+  display: flex;
+  align-items: center;
+}
+
+.postUser img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.postUser > a {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.postUser strong {
+  color: var(--background);
+  background: var(--foreground);
+  width: fit-content;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+.postUser small {
+  color: gray;
+}
+
+.actionsBar {
+  display: flex;
+  background: var(--foreground);
+  align-self: self-end;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.mediaContainer {
+  border-radius: 20px;
+  padding: 10px 30px 0 30px;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--foreground);
+  padding: 0 20px;
+  user-select: none;
+}
+
+.navButton svg {
+  width: 20px;
+}
