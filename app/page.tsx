@@ -4,48 +4,20 @@ import styles from './page.module.css';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Loading from '@/app/loading';
 import PostBlock from "./postBlock";
-import { usePostsStore } from '@/store/usePostsStore';
-
-enum PostType {
-  text = 'text',
-  image = 'image',
-  video = 'video'
-}
+import {Post} from '@/app/postBlock';
 
 interface LoginRespon {
   isLoggedIn: boolean,
   userId: string
 }
 
-export interface Post {
-  id: string;
-  user_id: string;
-  content: string;
-  post_type: PostType;
-  like_count: number;
-  dislike_count: number;
-  share_count: number;
-  created_at: Date;
-  comment_count: number;
-  username: string;
-}
-
 export default function Home() {
-  //const [posts, setPosts] = useState<Post[]>([]);
-  //const [page, setPage] = useState(1);
-  //const [hasMore, setHasMore] = useState(true);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [loginRespon, setLoginRespon] = useState<LoginRespon | null>(null);
   const fetchedRef = useRef(false); // ✅ block duplicate fetch
-
-  const {
-    posts,
-    page,
-    hasMore,
-    appendPosts,
-    nextPage,
-    setHasMore,
-  } = usePostsStore();
 
   useEffect(() => {
     if (fetchedRef.current) return;
@@ -74,8 +46,8 @@ export default function Home() {
 
     if (data.length === 0) setHasMore(false);
     else {
-      appendPosts(data);
-      nextPage();
+      setPosts(prev => [...prev, ...data]);
+      setPage(prev => prev + 1);
     }
 
     setLoading(false);
@@ -100,7 +72,6 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <h2>Home</h2>
       <div className={styles.postContainer}>
         {posts.map(post => (
           <PostBlock key={post.id} post={post} loginRespon={loginRespon}></PostBlock>

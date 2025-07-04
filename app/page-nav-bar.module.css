@@ -3,35 +3,62 @@
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 5px;
   background: var(--foreground);
   border-radius: 100px;
+  box-shadow: 5px 5px 5px #00000055;
 }
 
 .pageNav ul {
   display: flex;
   list-style-type: none;
+  align-items: center;
   margin: 0;
   padding: 0;
+  height: 60px;
 }
 
-.pageNav ul li {
-  margin-left: 5px;
-  margin-right: 5px;
-  border-radius: 100px;
+.navBtn > div {
+  width: 45px;
+  height: 45px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
   transition: all 0.3s;
 }
 
-.pageNav ul li:hover {
-  background: #b4b4b4;
+.navBtn > div:hover {
+  background: var(--foreground-hover);
 }
 
-.pageNav ul li a img {
+.navBtn a img {
   border-radius: 100px;
   padding: 10px;
   padding-bottom: 6px;
 }
 
 .selected {
-  background: #b4b4b4;
+  background: var(--foreground-hover);
+}
+
+.createBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #81c2ac;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 3px 5px #00000055;
+  transition: all 0.3s;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.createBtn:hover {
+  background: #9fc3b6;
+}
+
+.createBtn img {
+  width: 30px;
+  height: 30px;
 }

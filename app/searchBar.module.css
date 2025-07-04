@@ -1,0 +1,36 @@
+.searchBar {
+  display: flex;
+  align-self: center;
+  align-items: center;
+}
+
+.searchInput {
+  border-radius: 20px;
+  border: none;
+  background: var(--foreground);
+  padding: 5px 10px;
+  color: var(--background);
+  outline: none;
+}
+
+.searchInput:focus {
+  background: var(--foreground-hover);
+}
+
+.searchBtn {
+  border: none;
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
+  color: var(--background);
+  background: var(--foreground);
+  margin-left: 5px;
+}
+
+.searchBtn:hover {
+  background: var(--foreground-hover);
+}
+
+.searchBtn svg {
+  width: 13px;
+}

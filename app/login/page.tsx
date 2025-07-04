@@ -28,7 +28,6 @@ export default function Page() {
         handleLogin()
           .then(() => setBtnDisabled(false));
       }} className={styles.form}>
-        <h2>🔑 Login</h2>
         <input type="email" placeholder="Email" onChange={e => setLoginInfo({ ...loginInfo, email: e.target.value })} required />
         <input type="password" placeholder="Password" onChange={e => setLoginInfo({ ...loginInfo, password: e.target.value })} required />
         <button type="submit" disabled={btnDisabled}>Login</button>

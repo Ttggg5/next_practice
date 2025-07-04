@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     serverBaseUrl: 'http://localhost:5000',
     serverPort: '5000',
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

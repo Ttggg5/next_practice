@@ -1,12 +1,16 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --background-hover: #c9c9c9;
+  --foreground-hover: #404040;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --background-hover: #404040;
+    --foreground-hover: #c9c9c9;
   }
 }
 
@@ -50,3 +54,12 @@ a {
   animation: l1 1s infinite;
 }
 @keyframes l1 {to{transform: rotate(.5turn)}}
+
+header {
+  display: flex;
+  position: fixed;
+  padding: 10px;
+  justify-content: space-between;
+  width: 100%;
+  z-index: 20;
+}
