@@ -1,6 +1,53 @@
+.page {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 50%;
+  transform: translate(-50%, -40%);
+  width: 50%;
+  min-width: 200px;
+  max-width: 400px;
+}
+
 .form {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    max-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form input {
+  padding: 5px;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid var(--foreground);
+  color: var(--foreground);
+  outline: none;
+  background: transparent;
+  margin-top: 10px;
+}
+
+.form input:focus {
+  outline: none;
+  border-bottom: 1px solid var(--foreground-hover);
+}
+
+.submitBtn {
+  margin-top: 40px;
+  background: var(--main);
+  border: none;
+  height: 30px;
+  border-radius: 100px;
+}
+
+.submitBtn:hover {
+  background: var(--main-hover);
+}
+
+.submitBtn:disabled {
+  background: gray;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }

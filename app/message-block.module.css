@@ -1,0 +1,30 @@
+.messageBlockContainer {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  border-radius: 100px;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  z-index: 100;
+  gap: 0.5rem;
+}
+
+.messageBlock {
+  display: flex;
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 100px;
+  min-width: 240px;
+  transition: all 0.3s;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.removeBtn {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 18px;
+}

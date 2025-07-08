@@ -4,6 +4,7 @@ import "./globals.css";
 import PageNavBar from "./page-nav-bar";
 import Title from "./title";
 import SearchBar from "./searchBar";
+import MessageBlock from "./message-block";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <header>
           <Title></Title>
+          <MessageBlock></MessageBlock>
           <SearchBar></SearchBar>
         </header>
         {children}

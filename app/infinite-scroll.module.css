@@ -1,0 +1,14 @@
+.postLoadingArea {
+  align-self: center;
+  margin-top: 20px;
+}
+
+.postContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding-top: 50px;
+  padding-bottom: 150px;
+  width: 60%;
+  min-width: 300px;
+}

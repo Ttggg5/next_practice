@@ -18,22 +18,26 @@
 }
 
 .navBtn > div {
-  width: 45px;
-  height: 45px;
+  display: flex;
+  width: 50px;
+  height: 50px;
   margin-left: 10px;
   margin-right: 10px;
   border-radius: 50%;
   transition: all 0.3s;
+  justify-content: center;
+  align-items: center;
 }
 
 .navBtn > div:hover {
   background: var(--foreground-hover);
 }
 
-.navBtn a img {
+.navBtn > div a img {
   border-radius: 100px;
   padding: 10px;
   padding-bottom: 6px;
+  width: 100%;
 }
 
 .selected {
@@ -44,7 +48,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #81c2ac;
+  background: var(--main);
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -55,7 +59,7 @@
 }
 
 .createBtn:hover {
-  background: #9fc3b6;
+  background: var(--main-hover);
 }
 
 .createBtn img {

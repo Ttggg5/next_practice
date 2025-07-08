@@ -1,23 +1,13 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './like-button.module.css';
 
-interface Props {
-  isUserLogin: boolean;
-  count: number;
-  postId: string;
-}
-
-const LikeButton: React.FC<Props> = ({isUserLogin, count, postId}) => {
+export default function LikeButton({isUserLogin, count, postId}: {isUserLogin: boolean, count: number, postId: string}) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(count);
-  const fetchedRef = useRef(false); // ✅ block duplicate fetch
 
   useEffect(() => {
-    if (fetchedRef.current) return;
-    fetchedRef.current = true;
-
     if (isUserLogin){
       fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${postId}/isLiked`, { credentials: 'include' })
         .then(async (res) => {
@@ -29,7 +19,7 @@ const LikeButton: React.FC<Props> = ({isUserLogin, count, postId}) => {
           setIsLiked(data.isLiked);
         });
     }
-  });
+  }, [isUserLogin]);
 
   return (
     <div className={styles.container}>
@@ -88,5 +78,3 @@ const LikeButton: React.FC<Props> = ({isUserLogin, count, postId}) => {
     </div>
   );
 }
-
-export default LikeButton;

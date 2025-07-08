@@ -11,7 +11,7 @@ enum PostType {
   video = 'video'
 }
 
-interface LoginRespon {
+export interface MeRespon {
   isLoggedIn: boolean,
   userId: string
 }
@@ -29,7 +29,7 @@ export interface Post {
   username: string;
 }
 
-export default function PostBlock({ post, loginRespon }: { post: Post, loginRespon: LoginRespon | null }) {
+export default function PostBlock({ post, meRespon }: { post: Post, meRespon: MeRespon | null }) {
   const [mediaPaths, setMediaPaths] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -151,7 +151,7 @@ export default function PostBlock({ post, loginRespon }: { post: Post, loginResp
       <small>{new Date(post.created_at).toLocaleString()}</small>
 
       <div className={styles.actionsBar}>
-        <LikeButton isUserLogin={loginRespon?.isLoggedIn ? true : false} count={post.like_count} postId={post.id}></LikeButton>
+        <LikeButton isUserLogin={meRespon?.isLoggedIn ? true : false} count={post.like_count} postId={post.id}></LikeButton>
       </div>
     </div>
   )
