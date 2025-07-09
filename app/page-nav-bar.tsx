@@ -1,10 +1,14 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import styles from './page-nav-bar.module.css';
+import { IoAddOutline } from "react-icons/io5";
+import { HiHome } from "react-icons/hi2";
+import { FaBell } from "react-icons/fa";
+import { IoIosChatbubbles } from "react-icons/io";
+import { IoPerson } from "react-icons/io5";
 
 interface Respon {
   isLoggedIn: boolean,
@@ -17,7 +21,6 @@ export default function PageNavBar() {
   const [currentPage, setCurrentPage] = useState<string>("");
   const fetchedRef = useRef(false); // ✅ block duplicate fetch
   
-  const nav_icon_size = 45;
   const pathname = usePathname();
 
   useEffect(() => {
@@ -58,48 +61,32 @@ export default function PageNavBar() {
       <ul>
         <li className={styles.navBtn}>
           <div className={pagesIcon.home}>
-            <Link href="/">
-              <img src="/house-solid.svg" alt="Home"/>
-            </Link>
+            <Link href='/'><HiHome /></Link>
           </div>
         </li>
 
         <li className={styles.navBtn}>
           <div className={pagesIcon.notification}>
-            <Link href="/notification">
-              <img src="/bell-solid.svg" alt="Notification"/>
-            </Link>
+            <Link href='/notification'><FaBell /></Link>
           </div>
         </li>
 
         <li>
           <div className={styles.createBtn}>
-            {loginRespon?.isLoggedIn ? (
-              <div onClick={() => {
-
-              }}>
-                <img src="/plus-solid.svg" alt="Create post"/>
-              </div>
-            ) : (
-              <Link href="/login">
-                <img src="/plus-solid.svg" alt="Create post"/>
-              </Link>
-            )}
+            <Link href={loginRespon?.isLoggedIn ? '/create-post' : '/login'}><IoAddOutline /></Link>
           </div>
         </li>
 
         <li className={styles.navBtn}>
           <div className={pagesIcon.chat}>
-            <Link href="/chat">
-              <img src="/comments-solid.svg" alt="Chat"/>
-            </Link>
+            <Link href='/chat'><IoIosChatbubbles /></Link>
           </div>
         </li>
 
         <li className={styles.navBtn}>
           <div className={pagesIcon.profile}>
             <Link href={loginRespon?.isLoggedIn ? `/profile/${loginRespon?.userId}` : "/login"}>
-              <img src={loginRespon?.isLoggedIn ? `http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${loginRespon?.userId}` : "/user-solid.svg"} alt="Profile"/>
+              {loginRespon?.isLoggedIn ? <img src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${loginRespon?.userId}`} alt='Profile'/> : <IoPerson/>}
             </Link>
           </div>
         </li>

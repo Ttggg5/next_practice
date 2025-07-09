@@ -27,17 +27,25 @@
   transition: all 0.3s;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .navBtn > div:hover {
   background: var(--foreground-hover);
 }
 
+.navBtn > div a svg {
+  color: var(--background);
+  width: 30px;
+  height: 30px;
+}
+
 .navBtn > div a img {
   border-radius: 100px;
   padding: 10px;
-  padding-bottom: 6px;
   width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: -0.2rem;
 }
 
 .selected {
@@ -62,7 +70,7 @@
   background: var(--main-hover);
 }
 
-.createBtn img {
-  width: 30px;
-  height: 30px;
+.createBtn svg {
+  width: 40px;
+  height: 40px;
 }

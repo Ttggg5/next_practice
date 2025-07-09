@@ -5,7 +5,7 @@ import styles from './postBlock.module.css';
 import LikeButton from './like-button';
 import { useEffect, useRef, useState } from 'react';
 
-enum PostType {
+export enum PostType {
   text = 'text',
   image = 'image',
   video = 'video'

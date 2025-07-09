@@ -1,18 +1,20 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import UploadAvatar from './upload-avatar';
 import { useParams } from 'next/navigation';
 import Loading from '@/app/loading';
 import styles from './page.module.css';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import InfiniteScroll from '@/app/infinite-scroll';
 import { MeRespon } from '@/app/postBlock';
+import { BiCalendar } from "react-icons/bi";
+import { MdEdit } from "react-icons/md";
 
 interface Profile {
   id: string;
   username: string;
   email: string;
+  create_time: Date;
   bio?: string;
 }
 
@@ -76,10 +78,20 @@ export default function Page() {
   return (
     <div className={styles.page}>
       <div className={styles.profile}>
-        <img className={styles.avatar} src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${userId}`} alt="avatar" />
-        {curLogin?.userId === profile.id && <button></button>}
-        <h2>{profile.username}</h2>
-        {profile.bio ? <p>{profile.bio}</p> : <p>Nothing has been written here.</p>}
+        <div className={styles.avatarNameContainer}>
+          <img className={styles.avatar} src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${userId}`} alt="avatar" />
+          <div className={styles.infoContainer}>
+            <h2>{profile.username}</h2>
+            <p>{profile.id}</p>
+          </div>
+        </div>
+        <p className={styles.createDate}><BiCalendar style={{fontSize: '20px', marginRight: '5px'}}/>Create at: {new Date(profile.create_time).toDateString()}</p>
+
+        <div className={styles.bio}>
+          {profile.bio ? <p>{profile.bio}</p> : <p>Nothing has been written here.</p>}
+        </div>
+
+        {curLogin?.userId === profile.id && <button className={styles.editBtn}><MdEdit style={{marginRight: '5px'}} />Edit profile</button>}
       </div>
       
       <InfiniteScroll fetchContent={fetchUserPosts(userId)}></InfiniteScroll>
