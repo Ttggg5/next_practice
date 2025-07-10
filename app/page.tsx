@@ -16,9 +16,5 @@ const fetchNewestPosts = async (page: number) => {
 };
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <InfiniteScroll fetchContent={fetchNewestPosts}></InfiniteScroll>
-    </div>
-  );
+  return (<InfiniteScroll fetchContent={fetchNewestPosts}></InfiniteScroll>);
 }

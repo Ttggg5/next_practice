@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
-import { MeRespon, PostType } from '@/app/postBlock';
+import { MeRespon } from '@/app/postBlock';
 import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 
@@ -15,7 +15,6 @@ export default function Page() {
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
   const [content, setContent] = useState('');
   const [files, setFiles] = useState<File[]>([]);
-  const [type, setType] = useState<PostType>(PostType.text);
   const [loading, setLoading] = useState(false);
   const addMessage = useMessageStore((state) => state.addMessage);
   const router = useRouter();
@@ -46,7 +45,6 @@ export default function Page() {
 
     const formData = new FormData();
     formData.append('content', content);
-    formData.append('postType', type);
     files.forEach(file => formData.append('files', file));
 
     fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/create`, {
@@ -60,7 +58,6 @@ export default function Page() {
         if (res.postId) {
           setContent('');
           setFiles([]);
-          setType(PostType.text);
           addMessage(res.message, MessageType.success);
           router.push('./');
         } else {
@@ -70,41 +67,30 @@ export default function Page() {
   };
 
   return (
-    <div className={styles.page}>
+    <>
       {curLogin &&
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Type:</label>
-            <select value={type} onChange={(e) => setType(e.target.value as any)}>
-              <option value="text">Text</option>
-              <option value="image">Image</option>
-              <option value="video">Video</option>
-            </select>
-          </div>
-
+        <form className={styles.createPostForm} onSubmit={handleSubmit}>
           <div>
             <label>Content:</label><br />
             <textarea
+              className={styles.content}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows={5}
-              style={{ width: '100%', marginTop: '0.5rem' }}
+              rows={6}
               placeholder="Write something..."
             />
           </div>
 
-          {type !== 'text' && (
-            <div>
-              <label>Media Files:</label><br />
-              <input type="file" multiple onChange={handleFileChange} accept={type === 'image' ? 'image/*' : 'video/*'} />
-            </div>
-          )}
+          <div className={styles.fileInputs}>
+            <input type="file" multiple onChange={(e) => handleFileChange(e)} accept={'image/*'} />
+            <input type="file" multiple onChange={(e) => handleFileChange(e)} accept={'video/*'} />
+          </div>
 
-          <button type="submit" disabled={loading} style={{ marginTop: '1rem' }}>
+          <button className={styles.submitBtn} type="submit" disabled={loading}>
             {loading ? 'Posting...' : 'Post'}
           </button>
         </form>
       }
-    </div>
+    </>
   );
 }

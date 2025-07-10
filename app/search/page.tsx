@@ -15,9 +15,5 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
 
-  return (
-    <div className={styles.page}>
-      <InfiniteScroll fetchContent={fetchSearchPosts(query)}></InfiniteScroll>
-    </div>
-  );
+  return (<InfiniteScroll fetchContent={fetchSearchPosts(query)}></InfiniteScroll>);
 }

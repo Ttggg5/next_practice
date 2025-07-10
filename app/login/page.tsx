@@ -44,7 +44,7 @@ export default function Page() {
   };
 
   return (
-    <div className={styles.page}>
+    <>
       {curLogin &&
         <form onSubmit={e => {
           e.preventDefault();
@@ -61,6 +61,6 @@ export default function Page() {
             <Link href='/register'>Register</Link>
           </div>
         </form>}
-    </div>
+    </>
   );
 }

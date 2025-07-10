@@ -3,13 +3,10 @@
 import Link from 'next/link';
 import styles from './postBlock.module.css';
 import LikeButton from './like-button';
-import { useEffect, useRef, useState } from 'react';
-
-export enum PostType {
-  text = 'text',
-  image = 'image',
-  video = 'video'
-}
+import { useEffect, useState } from 'react';
+import LazyVideo from './lazyVideo';
+import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import { FaVideo } from "react-icons/fa6";
 
 export interface MeRespon {
   isLoggedIn: boolean,
@@ -20,7 +17,6 @@ export interface Post {
   id: string;
   user_id: string;
   content: string;
-  post_type: PostType;
   like_count: number;
   dislike_count: number;
   share_count: number;
@@ -29,30 +25,28 @@ export interface Post {
   username: string;
 }
 
+const isImage = (filename: string) => /\.(jpe?g|png|gif|webp)$/i.test(filename);
+const isVideo = (filename: string) => /\.(mp4|webm|ogg)$/i.test(filename);
+
 export default function PostBlock({ post, meRespon }: { post: Post, meRespon: MeRespon | null }) {
   const [mediaPaths, setMediaPaths] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const fetchedRef = useRef(false); // ✅ block duplicate fetch
-  
-  
-    useEffect(() => {
-      if (post.post_type != PostType.text) {
-        if (fetchedRef.current) return;
-        fetchedRef.current = true;
-    
-        // fetch media of post
-        fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${post.id}/media`, { credentials: 'include' })
-          .then(async (res) => {
-            if (!res.ok)
-              throw new Error('Failed to fetch media');
-            return res.json();
-          })
-          .then((data: string[]) => {
-            setMediaPaths(data);
-          });
-      }
-    });
+
+  useEffect(() => {
+    // fetch media of post
+    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${post.id}/media`, { credentials: 'include' })
+      .then(async (res) => {
+        if (!res.ok)
+          throw new Error('Failed to fetch media');
+        return res.json();
+      })
+      .then((data) => {
+        if (data.urls) {
+          setMediaPaths(data.urls);
+        }
+      });
+  }, []);
 
   const openViewer = (index: number) => {
     setCurrentIndex(index);
@@ -63,21 +57,13 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
     setShowModal(false);
   };
 
-  const prevImage = () => {
+  const prevMedia = () => {
     setCurrentIndex((prev) => (prev - 1 + mediaPaths.length) % mediaPaths.length);
   };
 
-  const nextImage = () => {
+  const nextMedia = () => {
     setCurrentIndex((prev) => (prev + 1) % mediaPaths.length);
   };
-
-  let firstImage = '';
-  let remainingCount = 0;
-  if (mediaPaths.length > 0) {
-    firstImage = mediaPaths[0];
-    remainingCount = mediaPaths.length - 1;
-  }
-
 
   return (
     <div key={post.id} className={styles.post}>
@@ -91,63 +77,134 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
 
       <p>{post.content}</p>
 
-      {post.post_type === PostType.image && (
-        <div className={styles.mediaContainer}>
-          {/* Thumbnail */}
-          <div
-            style={{ position: 'relative', display: 'inline-block', cursor: 'pointer' }}
-            onClick={() => openViewer(0)}
-          >
-            <img src={`http://${window.location.hostname}:${process.env.serverPort}${firstImage}`} alt="Preview" style={{ maxWidth: '100%', borderRadius: '8px' }} />
-            {remainingCount > 0 && (
-              <div style={{
-                position: 'absolute',
-                bottom: '8px',
-                right: '8px',
-                background: 'rgba(0,0,0,0.6)',
-                color: '#fff',
-                padding: '4px 8px',
-                borderRadius: '4px',
-                fontSize: '0.9rem'
-              }}>
-                +{remainingCount} more
-              </div>
-            )}
-          </div>
+      <div className={styles.mediaContainer}>
+        {mediaPaths.length > 0 && (() => {
+          const mediaList = mediaPaths; // mix of image/video paths
+          const showMedia = mediaList.slice(0, 4);
+          const extraCount = mediaList.length - 4;
 
-          {/* Modal */}
-          {showModal && (
-            <div onClick={closeViewer} style={{
-              position: 'fixed', top: 0, left: 0, width: '100%',
-              height: '100%', backgroundColor: 'rgba(0,0,0,0.8)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 1000
-            }}>
-              {remainingCount > 0 && (
-                <button onClick={(e) => { e.stopPropagation(); prevImage(); }} className={styles.navButton}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill='currentColor'>
-                    <path d="M9.4 278.6c-12.5-12.5-12.5-32.8 0-45.3l128-128c9.2-9.2 22.9-11.9 34.9-6.9s19.8 16.6 19.8 29.6l0 256c0 12.9-7.8 24.6-19.8 29.6s-25.7 2.2-34.9-6.9l-128-128z"/>
-                  </svg>
-                </button>
-              )}
+          // Single media
+          if (mediaList.length === 1) {
+            const fullUrl = `http://${window.location.hostname}:${process.env.serverPort}${mediaList[0]}`;
+            const media = mediaList[0];
+
+            return isImage(media) ? (
               <img
-                src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`}
-                alt="Full"
-                style={{ maxHeight: '90vh', maxWidth: '80%', margin: '0 20px' }}
-                onClick={(e) => e.stopPropagation()}
+                src={fullUrl}
+                alt="single"
+                style={{ width: '100%', borderRadius: '8px', cursor: 'pointer' }}
+                onClick={() => openViewer(0)}
               />
-              {remainingCount > 0 && (
-                <button onClick={(e) => { e.stopPropagation(); nextImage(); }} className={styles.navButton}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill='currentColor'>
-                    <path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/>
-                  </svg>
+            ) : (
+              <LazyVideo src={fullUrl} />
+            );
+          }
+
+          // Grid of media
+          return (
+            <div className={styles.mediaGrid}>
+              {showMedia.map((media, index) => {
+                const fullUrl = `http://${window.location.hostname}:${process.env.serverPort}${media}`;
+                const isLast = index === 3 && extraCount > 0;
+
+                return (
+                  <div
+                    key={index}
+                    className={styles.mediaItem}
+                    onClick={() => openViewer(index)}
+                  >
+                    {isImage(media) ? (
+                      <img src={fullUrl} alt={`media-${index}`} />
+                    ) : (
+                      <>
+                        <video src={fullUrl} preload="metadata" muted />
+                        <div className={styles.playOverlay}><FaVideo /> Video</div>
+                      </>
+                    )}
+
+                    {/* Overlay count for 4+ */}
+                    {isLast && (
+                      <div className={styles.overlayCount}>+{extraCount}</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
+
+        {showModal && (
+          <div
+            onClick={closeViewer}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0,0,0,0.85)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 9999,
+            }}
+          >
+            {/* Navigation buttons */}
+            {mediaPaths.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevMedia();
+                  }}
+                  style={{
+                    position: 'absolute',
+                    left: '20px',
+                    fontSize: '2rem',
+                    background: 'none',
+                    border: 'none',
+                    color: 'white',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <FaAngleLeft />
                 </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextMedia();
+                  }}
+                  style={{
+                    position: 'absolute',
+                    right: '20px',
+                    fontSize: '2rem',
+                    background: 'none',
+                    border: 'none',
+                    color: 'white',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <FaAngleRight />
+                </button>
+              </>
+            )}
+
+            {/* Actual media preview */}
+            <div onClick={(e) => e.stopPropagation()} style={{ display: 'flex', maxWidth: '80%', maxHeight: '80%', justifyContent: 'center' }}>
+              {isImage(mediaPaths[currentIndex]) ? (
+                <img
+                  src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`}
+                  alt="modal-img"
+                  style={{ maxWidth: '80%', maxHeight: '80%', borderRadius: '10px' }}
+                />
+              ) : (
+                <LazyVideo src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`} />
               )}
             </div>
-          )}
-        </div>
-      )}
-      
+          </div>
+        )}
+      </div>
+
       <small>{new Date(post.created_at).toLocaleString()}</small>
 
       <div className={styles.actionsBar}>

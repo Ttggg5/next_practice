@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Loading from '@/app/loading';
 import styles from './page.module.css';
@@ -9,6 +9,7 @@ import InfiniteScroll from '@/app/infinite-scroll';
 import { MeRespon } from '@/app/postBlock';
 import { BiCalendar } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
+import { TbLogout2 } from "react-icons/tb";
 
 interface Profile {
   id: string;
@@ -32,6 +33,25 @@ export default function Page() {
   const addMessage = useMessageStore((state) => state.addMessage);
   const params = useParams();
   const userId = params.id as string;
+
+  const handleLogout = () => {
+    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.message);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        addMessage(data.message, MessageType.success);
+        window.location.href = `http://${window.location.host}/`;
+      })
+      .catch((err: Error) => addMessage(err.message, MessageType.error));
+  };
 
   useEffect(() => {
     if (!userId) {
@@ -70,13 +90,13 @@ export default function Page() {
   if (!profile) {
     return (
       <div className={styles.page}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>Loading Profile<Loading></Loading></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>Loading Profile<Loading></Loading></div>
       </div>
     );
   };
 
   return (
-    <div className={styles.page}>
+    <div>
       <div className={styles.profile}>
         <div className={styles.avatarNameContainer}>
           <img className={styles.avatar} src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${userId}`} alt="avatar" />
@@ -85,15 +105,20 @@ export default function Page() {
             <p>{profile.id}</p>
           </div>
         </div>
-        <p className={styles.createDate}><BiCalendar style={{fontSize: '20px', marginRight: '5px'}}/>Create at: {new Date(profile.create_time).toDateString()}</p>
+        <p className={styles.createDate}><BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}</p>
 
         <div className={styles.bio}>
           {profile.bio ? <p>{profile.bio}</p> : <p>Nothing has been written here.</p>}
         </div>
 
-        {curLogin?.userId === profile.id && <button className={styles.editBtn}><MdEdit style={{marginRight: '5px'}} />Edit profile</button>}
+        {curLogin?.userId === profile.id && (
+          <div className={styles.functionBtns}>
+            <button className={styles.editBtn}><MdEdit style={{ marginRight: '5px' }} />Edit profile</button>
+            <button className={styles.logoutBtn} onClick={handleLogout}><TbLogout2 style={{ marginRight: '5px' }} />Logout</button>
+          </div>
+        )}
       </div>
-      
+
       <InfiniteScroll fetchContent={fetchUserPosts(userId)}></InfiniteScroll>
     </div>
   );

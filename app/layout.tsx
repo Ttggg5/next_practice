@@ -33,7 +33,9 @@ export default function RootLayout({
           <MessageBlock></MessageBlock>
           <SearchBar></SearchBar>
         </header>
-        {children}
+        <div className="page">
+          {children}
+        </div>
         <PageNavBar></PageNavBar>
       </body>
     </html>
