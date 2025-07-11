@@ -1,7 +1,7 @@
 'use client';
 
 import { useMessageStore } from '@/store/useMessageStore';
-import styles from './message-block.module.css'
+import styles from './messageBlock.module.css'
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function MessageContainer() {

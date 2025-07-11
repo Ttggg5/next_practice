@@ -2,16 +2,66 @@
   width: 100%;
 }
 
+.inputContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 .content {
+  flex-grow: 1;
   width: 100%;
   border-radius: 10px;
   padding: 10px;
   resize: none;
-  margin-top: 10px;
 }
 
 .fileInputs {
+  display: flex;
+  flex-direction: column;
+  color: var(--foreground);
+  font-size: 25px;
+}
 
+.fileInputs label {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.fileInputs label:hover {
+  background: var(--background-hover);
+  border-radius: 50%;
+}
+
+.fileInputs input {
+  display: none;
+}
+
+.previewContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.preview {
+  width: 300px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+}
+
+.preview img,
+.preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+}
+
+.preview video:fullscreen {
+  object-fit: contain;
 }
 
 .submitBtn {
@@ -21,10 +71,11 @@
   font-weight: bold;
   transition: all 0.3s;
   width: 100%;
-  padding: 3px;
+  padding: 5px;
   border: none;
   cursor: pointer;
   margin-top: 10px;
+  font-size: 20px;
 }
 
 .submitBtn:hover {

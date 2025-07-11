@@ -1,0 +1,14 @@
+.followBtn {
+  border-radius: 100px;
+  background: var(--foreground);
+  width: 100px;
+  border: none;
+  color: var(--background);
+  font-weight: bold;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.followBtn:hover {
+  background: var(--foreground-hover);
+}

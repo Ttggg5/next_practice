@@ -1,7 +1,7 @@
 'use client'
 
 import styles from './page.module.css';
-import InfiniteScroll from './infinite-scroll';
+import InfiniteScroll from './infiniteScroll';
 
 interface MeRespon {
   isLoggedIn: boolean,

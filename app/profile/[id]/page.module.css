@@ -23,23 +23,54 @@
   width: 100%;
 }
 
-.infoContainer h2 {
-  background: var(--foreground);
+.infoContainer h1 {
   border-radius: 100px;
   padding: 5px 10px;
-  color: var(--background);
-  width: fit-content;
+  color: var(--foreground);
+  font-weight: bold;
 }
 
 .infoContainer p {
   padding: 0 10px;
   color: gray;
+  margin-top: -10px;
+}
+
+.followInfo {
+  display: flex;
+  background: var(--foreground);
+  color: var(--background);
+  border-radius: 100px;
+  font-weight: bold;
+  align-items: center;
+}
+
+.followInfo button {
+  padding: 5px 15px;
+  background: var(--foreground);
+  color: var(--background);
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.followInfo button:hover {
+  background: var(--foreground-hover);
+}
+
+.followerBtn {
+  border-radius: 100px 0 0 100px;
+}
+
+.followingBtn {
+  border-radius: 0 100px 100px 0;
 }
 
 .createDate {
   padding: 0 10px;
   color: gray;
   align-self: end;
+  margin-top: 10px;
 }
 
 .bio {
@@ -80,4 +111,11 @@
 
 .logoutBtn:hover {
   background: #af5858;
+}
+
+@media (max-width:600px) {
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
 }

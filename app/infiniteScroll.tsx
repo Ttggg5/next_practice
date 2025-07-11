@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import PostBlock, { Post, MeRespon } from './postBlock';
 import Loading from './loading';
-import styles from './infinite-scroll.module.css';
+import styles from './infiniteScroll.module.css';
 
 interface InfinitePostListProps {
   fetchContent: (page: number) => Promise<Post[]>;

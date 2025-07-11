@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import styles from './postBlock.module.css';
-import LikeButton from './like-button';
+import LikeButton from './likeButton';
 import { useEffect, useState } from 'react';
 import LazyVideo from './lazyVideo';
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
@@ -49,11 +49,13 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
   }, []);
 
   const openViewer = (index: number) => {
+    document.documentElement.style.overflow = 'hidden';
     setCurrentIndex(index);
     setShowModal(true);
   };
 
   const closeViewer = () => {
+    document.documentElement.style.overflow = '';
     setShowModal(false);
   };
 
@@ -92,7 +94,7 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
               <img
                 src={fullUrl}
                 alt="single"
-                style={{ width: '100%', borderRadius: '8px', cursor: 'pointer' }}
+                style={{ maxHeight: '80vh', maxWidth: '100%', borderRadius: '10px', cursor: 'pointer' }}
                 onClick={() => openViewer(0)}
               />
             ) : (
@@ -134,73 +136,47 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
         })()}
 
         {showModal && (
-          <div
-            onClick={closeViewer}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'rgba(0,0,0,0.85)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 9999,
-            }}
-          >
+          <div className={styles.modal} onClick={closeViewer}>
             {/* Navigation buttons */}
             {mediaPaths.length > 1 && (
-              <>
                 <button
+                  className={styles.modalNavBtn}
                   onClick={(e) => {
                     e.stopPropagation();
                     prevMedia();
                   }}
-                  style={{
-                    position: 'absolute',
-                    left: '20px',
-                    fontSize: '2rem',
-                    background: 'none',
-                    border: 'none',
-                    color: 'white',
-                    cursor: 'pointer',
-                  }}
                 >
                   <FaAngleLeft />
                 </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    nextMedia();
-                  }}
-                  style={{
-                    position: 'absolute',
-                    right: '20px',
-                    fontSize: '2rem',
-                    background: 'none',
-                    border: 'none',
-                    color: 'white',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <FaAngleRight />
-                </button>
-              </>
             )}
 
             {/* Actual media preview */}
-            <div onClick={(e) => e.stopPropagation()} style={{ display: 'flex', maxWidth: '80%', maxHeight: '80%', justifyContent: 'center' }}>
-              {isImage(mediaPaths[currentIndex]) ? (
-                <img
-                  src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`}
-                  alt="modal-img"
-                  style={{ maxWidth: '80%', maxHeight: '80%', borderRadius: '10px' }}
-                />
-              ) : (
-                <LazyVideo src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`} />
-              )}
-            </div>
+            {isImage(mediaPaths[currentIndex]) ? (
+              <img
+                src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`}
+                alt='modal-img'
+                style={{ maxHeight: '100vh', maxWidth: '90%', borderRadius: '10px' }}
+              />
+            ) : (
+              <video
+                src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`}
+                controls
+                preload='metadata'
+                style={{ maxWidth: '80%', maxHeight: '100vh' }}
+              />
+            )}
+
+            {mediaPaths.length > 1 && (
+              <button
+                className={styles.modalNavBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextMedia();
+                }}
+              >
+                <FaAngleRight />
+              </button>
+            )}
           </div>
         )}
       </div>

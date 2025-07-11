@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import styles from './page.module.css';
-import InfiniteScroll from '../infinite-scroll';
+import InfiniteScroll from '../infiniteScroll';
 
 const fetchSearchPosts = (query: string) => async (page: number) => {
   const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/search?q=${encodeURIComponent(query)}&page=${page}`, {

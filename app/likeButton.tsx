@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import styles from './like-button.module.css';
+import styles from './likeButton.module.css';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 

@@ -5,6 +5,9 @@ import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import { MeRespon } from '@/app/postBlock';
 import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
+import { RiImageAddFill } from "react-icons/ri";
+import { BiSolidVideoPlus } from "react-icons/bi";
+import { MdOutlinePostAdd } from "react-icons/md";
 
 interface CreateRespon {
   message: string;
@@ -14,8 +17,9 @@ interface CreateRespon {
 export default function Page() {
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
   const [content, setContent] = useState('');
-  const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const addMessage = useMessageStore((state) => state.addMessage);
   const router = useRouter();
 
@@ -33,10 +37,15 @@ export default function Page() {
       });
   }, []);
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
-    }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+    setSelectedFiles((prev) => [...prev, ...fileArray]);
+
+    const urls = fileArray.map(file => URL.createObjectURL(file));
+    setPreviews((prev) => [...prev, ...urls]);
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -45,7 +54,7 @@ export default function Page() {
 
     const formData = new FormData();
     formData.append('content', content);
-    files.forEach(file => formData.append('files', file));
+    selectedFiles.forEach(file => formData.append('files', file));
 
     fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/create`, {
       method: 'POST',
@@ -57,7 +66,8 @@ export default function Page() {
         setLoading(false);
         if (res.postId) {
           setContent('');
-          setFiles([]);
+          setSelectedFiles([]);
+          setPreviews([]);
           addMessage(res.message, MessageType.success);
           router.push('./');
         } else {
@@ -70,8 +80,8 @@ export default function Page() {
     <>
       {curLogin &&
         <form className={styles.createPostForm} onSubmit={handleSubmit}>
-          <div>
-            <label>Content:</label><br />
+          <label>Content:</label>
+          <div className={styles.inputContainer}>
             <textarea
               className={styles.content}
               value={content}
@@ -79,15 +89,29 @@ export default function Page() {
               rows={6}
               placeholder="Write something..."
             />
+            <div className={styles.fileInputs}>
+              <label><RiImageAddFill /><input type="file" multiple onChange={(e) => handleFileChange(e)} accept={'image/*'} /></label>
+              <label><BiSolidVideoPlus /><input type="file" multiple onChange={(e) => handleFileChange(e)} accept={'video/*'} /></label>
+            </div>
           </div>
 
-          <div className={styles.fileInputs}>
-            <input type="file" multiple onChange={(e) => handleFileChange(e)} accept={'image/*'} />
-            <input type="file" multiple onChange={(e) => handleFileChange(e)} accept={'video/*'} />
+          <div className={styles.previewContainer}>
+            {previews.map((url, index) => {
+              const file = selectedFiles[index];
+              const isImage = file.type.startsWith('image/');
+              const isVideo = file.type.startsWith('video/');
+
+              return (
+                <div key={index} className={styles.preview}>
+                  {isImage && <img src={url} alt={`preview-${index}`} />}
+                  {isVideo && <video src={url} controls />}
+                </div>
+              );
+            })}
           </div>
 
           <button className={styles.submitBtn} type="submit" disabled={loading}>
-            {loading ? 'Posting...' : 'Post'}
+            {loading ? 'Posting...' : (<><MdOutlinePostAdd /> Post</>)}
           </button>
         </form>
       }

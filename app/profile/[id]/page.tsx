@@ -5,11 +5,12 @@ import { useParams } from 'next/navigation';
 import Loading from '@/app/loading';
 import styles from './page.module.css';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
-import InfiniteScroll from '@/app/infinite-scroll';
+import InfiniteScroll from '@/app/infiniteScroll';
 import { MeRespon } from '@/app/postBlock';
 import { BiCalendar } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
+import FollowButton from '@/app/followButton';
 
 interface Profile {
   id: string;
@@ -32,7 +33,18 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const addMessage = useMessageStore((state) => state.addMessage);
   const params = useParams();
-  const userId = params.id as string;
+  const userId = decodeURIComponent(params.id as string);
+  const [followCount, setFollowCount] = useState({ followerCount: 0, followingCount: 0 });
+
+  useEffect(() => {
+    const fetchFollowCount = async () => {
+      const res = await fetch(`http://${location.hostname}:${process.env.serverPort}/api/user/${encodeURIComponent(userId)}/follow-count`);
+      const data = await res.json();
+      setFollowCount(data);
+    };
+
+    fetchFollowCount();
+  }, [userId]);
 
   const handleLogout = () => {
     fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/logout`, {
@@ -96,15 +108,26 @@ export default function Page() {
   };
 
   return (
-    <div>
+    <>
       <div className={styles.profile}>
         <div className={styles.avatarNameContainer}>
           <img className={styles.avatar} src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${userId}`} alt="avatar" />
           <div className={styles.infoContainer}>
-            <h2>{profile.username}</h2>
+            <h1>{profile.username}</h1>
             <p>{profile.id}</p>
           </div>
         </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+          <div className={styles.followInfo}>
+            <p><button className={styles.followerBtn}>{followCount.followerCount} Followers</button></p>
+            <p>|</p>
+            <p><button className={styles.followingBtn}>{followCount.followingCount} Following</button></p>
+          </div>
+
+          {curLogin?.userId !== profile.id && <div style={{ alignSelf: 'end' }}><FollowButton curLogin={curLogin} followingUserId={userId} /></div>}
+        </div>
+
         <p className={styles.createDate}><BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}</p>
 
         <div className={styles.bio}>
@@ -120,6 +143,6 @@ export default function Page() {
       </div>
 
       <InfiniteScroll fetchContent={fetchUserPosts(userId)}></InfiniteScroll>
-    </div>
+    </>
   );
 };

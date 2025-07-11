@@ -32,7 +32,7 @@ export default function LazyVideo({ src }: LazyVideoProps) {
         <video
           controls
           preload="metadata"
-          style={{ maxWidth: '100%', borderRadius: '8px' }}
+          style={{ maxHeight: '80vh', maxWidth: '100%', borderRadius: '8px' }}
           src={src}
         />
       )}

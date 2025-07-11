@@ -31,7 +31,7 @@
 }
 
 .navBtn > div:hover {
-  background: var(--foreground-hover);
+  transform: scale(120%, 120%);
 }
 
 .navBtn > div a svg {
@@ -67,7 +67,7 @@
 }
 
 .createBtn:hover {
-  background: var(--main-hover);
+  transform: scale(120%, 120%);
 }
 
 .createBtn svg {

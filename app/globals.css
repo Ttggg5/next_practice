@@ -87,5 +87,6 @@ svg {
 @media (max-width:600px) {
   .page {
     width: 100%;
+    min-width: 100px;
   }
 }

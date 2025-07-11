@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import styles from './page-nav-bar.module.css';
+import styles from './pageNavBar.module.css';
 import { IoAddOutline } from "react-icons/io5";
 import { HiHome } from "react-icons/hi2";
 import { FaBell } from "react-icons/fa";
