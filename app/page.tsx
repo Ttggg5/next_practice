@@ -2,6 +2,7 @@
 
 import styles from './page.module.css';
 import InfiniteScroll from './infiniteScroll';
+import PostBlock, { Post } from './postBlock';
 
 interface MeRespon {
   isLoggedIn: boolean,
@@ -16,5 +17,5 @@ const fetchNewestPosts = async (page: number) => {
 };
 
 export default function Home() {
-  return (<InfiniteScroll fetchContent={fetchNewestPosts}></InfiniteScroll>);
+  return (<InfiniteScroll<Post> fetchContent={fetchNewestPosts} renderItem={(post) => <PostBlock key={post.id} post={post} meRespon={null} />} />);
 }

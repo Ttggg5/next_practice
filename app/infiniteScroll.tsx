@@ -1,79 +1,71 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
-import PostBlock, { Post, MeRespon } from './postBlock';
+import { useEffect, useState, useRef, useCallback, ReactNode } from 'react';
 import Loading from './loading';
 import styles from './infiniteScroll.module.css';
 
-interface InfinitePostListProps {
-  fetchContent: (page: number) => Promise<Post[]>;
+export interface InfiniteScrollProps<T> {
+  fetchContent: (page: number) => Promise<T[]>;
+  renderItem: (item: T, index: number) => ReactNode;
+  rootMargin?: string;          // optional: how early to pre‑load (default 300px)
 }
 
-export default function InfinitePostList({ fetchContent }: InfinitePostListProps) {
-  const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
-  const [posts, setPosts] = useState<Post[]>([]);
+export default function InfiniteScroll<T>({
+  fetchContent,
+  renderItem,
+  rootMargin = '300px'
+}: InfiniteScrollProps<T>) {
+  const [items, setItems] = useState<T[]>([]);
+  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Refs to persist current page and prevent double fetch
-  const pageRef = useRef(1);
-  const loadingRef = useRef(false);
+  const loadingRef = useRef(false);               // prevent double fetch
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const sentryRef = useRef<HTMLDivElement | null>(null);
 
-  const loadPosts = useCallback(async () => {
+  const loadMore = useCallback(async () => {
     if (loadingRef.current || !hasMore) return;
-
     loadingRef.current = true;
     setLoading(true);
 
-    const data = await fetchContent(pageRef.current);
-
-    if (data.length === 0) {
-      setHasMore(false);
-    } else {
-      setPosts((prev) => [...prev, ...data]);
-      pageRef.current += 1;
+    const data = await fetchContent(page);
+    if (data.length === 0) setHasMore(false);
+    else {
+      setItems(prev => [...prev, ...data]);
+      setPage(prev => prev + 1);
     }
 
     setLoading(false);
     loadingRef.current = false;
-  }, [fetchContent, hasMore]);
+  }, [page, hasMore, fetchContent]);
 
+  // initial load
+  useEffect(() => { loadMore(); }, []);
+
+  // IntersectionObserver for sentinel div
   useEffect(() => {
-    loadPosts();
-  }, []);
+    if (!hasMore) return;
 
-  useEffect(() => {
-    // check login once
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/me`, {
-      credentials: 'include'
-    })
-      .then(async (res) => {
-        if (!res.ok) throw new Error('Failed to fetch user');
-        return res.json();
-      })
-      .then((data: MeRespon) => setCurLogin(data));
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
-      if (nearBottom && hasMore && !loadingRef.current) {
-        loadPosts();
-      }
-    };
-
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [loadPosts, hasMore]);
+    observerRef.current?.disconnect();
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && loadMore(),
+      { rootMargin }
+    );
+    if (sentryRef.current) {
+      observerRef.current.observe(sentryRef.current);
+    }
+    return () => observerRef.current?.disconnect();
+  }, [loadMore, hasMore, rootMargin]);
 
   return (
-    <div className={styles.postContainer}>
-      {posts.map((post) => (
-        <PostBlock key={post.id} post={post} meRespon={curLogin} />
-      ))}
+    <div className={styles.container}>
+      {items.map((item, idx) => renderItem(item, idx))}
+      {/* sentinel div */}
+      <div ref={sentryRef} />
       <div className={styles.postLoadingArea}>
         {loading && <Loading />}
-        {!hasMore && <p>No more posts.</p>}
+        {!hasMore && <p>No more items.</p>}
       </div>
     </div>
   );

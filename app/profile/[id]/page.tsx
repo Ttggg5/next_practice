@@ -6,11 +6,12 @@ import Loading from '@/app/loading';
 import styles from './page.module.css';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import InfiniteScroll from '@/app/infiniteScroll';
-import { MeRespon } from '@/app/postBlock';
+import PostBlock, { MeRespon, Post } from '@/app/postBlock';
 import { BiCalendar } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 import FollowButton from '@/app/followButton';
+import UserListModal from '../userFollowListModal';
 
 interface Profile {
   id: string;
@@ -35,6 +36,8 @@ export default function Page() {
   const params = useParams();
   const userId = decodeURIComponent(params.id as string);
   const [followCount, setFollowCount] = useState({ followerCount: 0, followingCount: 0 });
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
 
   useEffect(() => {
     const fetchFollowCount = async () => {
@@ -120,9 +123,9 @@ export default function Page() {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
           <div className={styles.followInfo}>
-            <p><button className={styles.followerBtn}>{followCount.followerCount} Followers</button></p>
+            <p><button className={styles.followerBtn} onClick={() => setShowFollowers(true)}>{followCount.followerCount} Followers</button></p>
             <p>|</p>
-            <p><button className={styles.followingBtn}>{followCount.followingCount} Following</button></p>
+            <p><button className={styles.followingBtn} onClick={() => setShowFollowing(true)}>{followCount.followingCount} Following</button></p>
           </div>
 
           {curLogin?.userId !== profile.id && <div style={{ alignSelf: 'end' }}><FollowButton curLogin={curLogin} followingUserId={userId} /></div>}
@@ -142,7 +145,10 @@ export default function Page() {
         )}
       </div>
 
-      <InfiniteScroll fetchContent={fetchUserPosts(userId)}></InfiniteScroll>
+      {showFollowers && (<UserListModal userId={userId} type="followers" onClose={() => setShowFollowers(false)} />)}
+      {showFollowing && (<UserListModal userId={userId} type="following" onClose={() => setShowFollowing(false)} />)}
+
+      <InfiniteScroll<Post> fetchContent={fetchUserPosts(userId)} renderItem={(post) => <PostBlock key={post.id} post={post} meRespon={null} />} />
     </>
   );
 };

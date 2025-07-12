@@ -45,7 +45,7 @@
   align-items: center;
 }
 
-.followInfo button {
+.followInfo > p > button {
   padding: 5px 15px;
   background: var(--foreground);
   color: var(--background);
@@ -54,7 +54,7 @@
   cursor: pointer;
 }
 
-.followInfo button:hover {
+.followInfo > p > button:hover {
   background: var(--foreground-hover);
 }
 

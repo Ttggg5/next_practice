@@ -2,7 +2,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --background-hover: #c9c9c9;
-  --foreground-hover: #404040;
+  --foreground-hover: #333333;
   --main: #81c2ac;
   --main-hover: #9fc3b6;
 }
@@ -11,7 +11,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --background-hover: #404040;
+    --background-hover: #333333;
     --foreground-hover: #c9c9c9;
   }
 }
