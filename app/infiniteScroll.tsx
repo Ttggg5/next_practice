@@ -6,8 +6,8 @@ import styles from './infiniteScroll.module.css';
 
 export interface InfiniteScrollProps<T> {
   fetchContent: (page: number) => Promise<T[]>;
-  renderItem: (item: T, index: number) => ReactNode;
-  rootMargin?: string;          // optional: how early to pre‑load (default 300px)
+  renderItem: (item: T, index: number, onItemDeleted: (id: string) => void) => ReactNode;
+  rootMargin?: string; // optional: how early to pre‑load (default 300px)
 }
 
 export default function InfiniteScroll<T>({
@@ -20,9 +20,13 @@ export default function InfiniteScroll<T>({
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const loadingRef = useRef(false);               // prevent double fetch
+  const loadingRef = useRef(false); // prevent double fetch
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sentryRef = useRef<HTMLDivElement | null>(null);
+
+  const handleDeleted = (id: string) =>{
+    setItems(prev => prev.filter(item => (item as any).id !== id));
+  }
 
   const loadMore = useCallback(async () => {
     if (loadingRef.current || !hasMore) return;
@@ -60,7 +64,7 @@ export default function InfiniteScroll<T>({
 
   return (
     <div className={styles.container}>
-      {items.map((item, idx) => renderItem(item, idx))}
+      {items.map((item, idx) => renderItem(item, idx, handleDeleted))}
       {/* sentinel div */}
       <div ref={sentryRef} />
       <div className={styles.postLoadingArea}>

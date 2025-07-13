@@ -8,7 +8,7 @@ export default function Page() {
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   const handleRegister = async () => {
-    const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/register`, {
+    const res = await fetch(`${process.env.serverBaseUrl}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(registerInfo),

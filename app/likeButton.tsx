@@ -12,7 +12,7 @@ export default function LikeButton({ isUserLogin, count, postId }: { isUserLogin
 
   useEffect(() => {
     if (isUserLogin) {
-      fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${postId}/isLiked`, { credentials: 'include' })
+      fetch(`${process.env.serverBaseUrl}/api/posts/${postId}/isLiked`, { credentials: 'include' })
         .then(async (res) => {
           if (!res.ok)
             throw new Error('Failed to fetch user');
@@ -29,7 +29,7 @@ export default function LikeButton({ isUserLogin, count, postId }: { isUserLogin
       <button className={isLiked ? `${styles.btn} ${styles.pressed}` : styles.btn} onClick={() => {
         if (isUserLogin) {
           if (isLiked) {
-            fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${postId}/unlike`, {
+            fetch(`${process.env.serverBaseUrl}/api/posts/${postId}/unlike`, {
               credentials: 'include',
               method: 'POST',
               headers: { 'Content-Type': 'application/json' }
@@ -47,7 +47,7 @@ export default function LikeButton({ isUserLogin, count, postId }: { isUserLogin
               });
           }
           else {
-            fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${postId}/like`, {
+            fetch(`${process.env.serverBaseUrl}/api/posts/${postId}/like`, {
               credentials: 'include',
               method: 'POST',
               headers: { 'Content-Type': 'application/json' }

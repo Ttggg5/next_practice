@@ -24,7 +24,7 @@ const UploadAvatar: React.FC<Props> = ({ userId }) => {
     formData.append('avatar', file);
 
     try {
-      const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/upload/${userId}`, {
+      const res = await fetch(`${process.env.serverBaseUrl}/api/profile/avatar/upload/${userId}`, {
         method: 'POST',
         body: formData,
         credentials: 'include',

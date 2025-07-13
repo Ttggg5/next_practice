@@ -14,7 +14,7 @@ export default function Page() {
 
   useEffect(() => {
     // check login
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/me`, { credentials: 'include' })
+    fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok)
           throw new Error('Failed to fetch user');
@@ -27,7 +27,7 @@ export default function Page() {
   }, []);
 
   const handleLogin = async () => {
-    const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/login`, {
+    const res = await fetch(`${process.env.serverBaseUrl}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include', // 🔐 important

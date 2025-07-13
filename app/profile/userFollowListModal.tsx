@@ -19,7 +19,7 @@ export default function UserListModal({ userId, type, onClose }: Props) {
 
   useEffect(() => {
     // check login
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/me`, { credentials: 'include' })
+    fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok)
           throw new Error('Failed to fetch user');

@@ -1,0 +1,27 @@
+.wrapper {
+  padding: 1rem;
+  width: 100%;
+}
+
+.heading {
+  margin-bottom: 1rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: .75rem;
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  padding: .4rem 1rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.active {
+  font-weight: 600;
+  border-color: var(--main);
+}

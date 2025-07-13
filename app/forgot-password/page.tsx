@@ -7,7 +7,7 @@ export default function Page() {
   const [message, setMessage] = useState('');
 
   const submit = async () => {
-    const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/forgot-password`, {
+    const res = await fetch(`${process.env.serverBaseUrl}/api/auth/forgot-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),

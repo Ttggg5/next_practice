@@ -1,0 +1,39 @@
+.wrapper { position: relative; }
+
+.trigger {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: var(--background-hover);
+  border-radius: 1rem;
+  min-width: 140px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.5);
+  z-index: 20;
+}
+
+.item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  font-size: .9rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 1rem;
+}
+
+.item:hover { background: var(--foreground-hover); }
+.danger     { color: #d32f2f; }
+.danger:hover { background: #dcc3bf; }

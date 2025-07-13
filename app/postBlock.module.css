@@ -20,6 +20,7 @@
 .postUser {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .postUser img {
@@ -44,6 +45,11 @@
 
 .postUser small {
   color: gray;
+}
+
+.optionBtn {
+  align-self: end;
+  margin-bottom: -2rem;
 }
 
 .actionsBar {

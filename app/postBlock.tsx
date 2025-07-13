@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import LazyVideo from './lazyVideo';
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa6";
+import PostOptions, { Option } from './postOptions';
+import { useMessageStore, MessageType } from '@/store/useMessageStore'
 
 export interface MeRespon {
   isLoggedIn: boolean,
@@ -26,16 +28,55 @@ export interface Post {
 }
 
 const isImage = (filename: string) => /\.(jpe?g|png|gif|webp)$/i.test(filename);
-const isVideo = (filename: string) => /\.(mp4|webm|ogg)$/i.test(filename);
+//const isVideo = (filename: string) => /\.(mp4|webm|ogg)$/i.test(filename);
 
-export default function PostBlock({ post, meRespon }: { post: Post, meRespon: MeRespon | null }) {
+export default function PostBlock({
+  post,
+  curLogin,
+  onDeleted,
+}: {
+  post: Post,
+  curLogin: MeRespon | null,
+  onDeleted?: (id: string) => void;
+}) {
   const [mediaPaths, setMediaPaths] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const addMessage = useMessageStore((state) => state.addMessage);
+
+  const copyLink = () => {
+    addMessage('Link copied', MessageType.info);
+    navigator.clipboard.writeText(`${location.origin}/post/${post.id}`);
+  };
+
+  const deletePost = async () => {
+    if (!confirm('Delete this post permanently?')) return;
+
+    const res = await fetch(`${process.env.serverBaseUrl}/api/posts/${post.id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+
+    if (res.ok) {
+      // Notify parent list to remove the post
+      onDeleted?.(post.id);
+      addMessage('Post delete', MessageType.success);
+    } else {
+      addMessage('Failed to delete post', MessageType.error);
+    }
+  };
+
+  const options = curLogin?.userId === post.user_id ?
+    [
+      { label: 'Copy link', onClick: copyLink },
+      { label: 'Edit post', onClick: () => { } },
+      { label: 'Delete', onClick: deletePost, danger: true }
+    ]
+    : [{ label: 'Copy link', onClick: copyLink }]
 
   useEffect(() => {
     // fetch media of post
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/${post.id}/media`, { credentials: 'include' })
+    fetch(`${process.env.serverBaseUrl}/api/posts/${post.id}/media`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok)
           throw new Error('Failed to fetch media');
@@ -69,8 +110,12 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
 
   return (
     <div key={post.id} className={styles.post}>
+      <div className={styles.optionBtn}>
+        <PostOptions options={options} />
+      </div>
+
       <div className={styles.postUser}>
-        <img alt="avatar" src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${post.user_id}`}></img>
+        <img alt="avatar" src={`${process.env.serverBaseUrl}/api/profile/avatar/${post.user_id}`}></img>
         <Link href={`/profile/${post.user_id}`}>
           <strong>{post.username}</strong>
           <small>{post.user_id}</small>
@@ -87,7 +132,7 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
 
           // Single media
           if (mediaList.length === 1) {
-            const fullUrl = `http://${window.location.hostname}:${process.env.serverPort}${mediaList[0]}`;
+            const fullUrl = `${process.env.serverBaseUrl}${mediaList[0]}`;
             const media = mediaList[0];
 
             return isImage(media) ? (
@@ -106,7 +151,7 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
           return (
             <div className={styles.mediaGrid}>
               {showMedia.map((media, index) => {
-                const fullUrl = `http://${window.location.hostname}:${process.env.serverPort}${media}`;
+                const fullUrl = `${process.env.serverBaseUrl}${media}`;
                 const isLast = index === 3 && extraCount > 0;
 
                 return (
@@ -139,27 +184,27 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
           <div className={styles.modal} onClick={closeViewer}>
             {/* Navigation buttons */}
             {mediaPaths.length > 1 && (
-                <button
-                  className={styles.modalNavBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    prevMedia();
-                  }}
-                >
-                  <FaAngleLeft />
-                </button>
+              <button
+                className={styles.modalNavBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevMedia();
+                }}
+              >
+                <FaAngleLeft />
+              </button>
             )}
 
             {/* Actual media preview */}
             {isImage(mediaPaths[currentIndex]) ? (
               <img
-                src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`}
+                src={`${process.env.serverBaseUrl}${mediaPaths[currentIndex]}`}
                 alt='modal-img'
                 style={{ maxHeight: '100vh', maxWidth: '90%', borderRadius: '10px' }}
               />
             ) : (
               <video
-                src={`http://${window.location.hostname}:${process.env.serverPort}${mediaPaths[currentIndex]}`}
+                src={`${process.env.serverBaseUrl}${mediaPaths[currentIndex]}`}
                 controls
                 preload='metadata'
                 style={{ maxWidth: '80%', maxHeight: '100vh' }}
@@ -184,7 +229,7 @@ export default function PostBlock({ post, meRespon }: { post: Post, meRespon: Me
       <small>{new Date(post.created_at).toLocaleString()}</small>
 
       <div className={styles.actionsBar}>
-        <LikeButton isUserLogin={meRespon?.isLoggedIn ? true : false} count={post.like_count} postId={post.id}></LikeButton>
+        <LikeButton isUserLogin={curLogin?.isLoggedIn ? true : false} count={post.like_count} postId={post.id}></LikeButton>
       </div>
     </div>
   )

@@ -22,7 +22,7 @@ interface Profile {
 }
 
 const fetchUserPosts = (userId: string) => async (page: number) => {
-  const res = await fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/posts/user/${userId}?page=${page}`, {
+  const res = await fetch(`${process.env.serverBaseUrl}/api/posts/user/${userId}?page=${page}`, {
     credentials: 'include',
   });
   return await res.json();
@@ -50,7 +50,7 @@ export default function Page() {
   }, [userId]);
 
   const handleLogout = () => {
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/logout`, {
+    fetch(`${process.env.serverBaseUrl}/api/auth/logout`, {
       method: 'POST',
       credentials: 'include'
     })
@@ -75,7 +75,7 @@ export default function Page() {
     }
 
     // Fetch user profile by ID
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/profile/${userId}`, { credentials: 'include' })
+    fetch(`${process.env.serverBaseUrl}/api/profile/${userId}`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok) {
           const data = await res.json();
@@ -87,7 +87,7 @@ export default function Page() {
       .catch((err: Error) => setError(err.message));
 
     // check login
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/me`, { credentials: 'include' })
+    fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok)
           throw new Error('Failed to fetch user');
@@ -114,7 +114,7 @@ export default function Page() {
     <>
       <div className={styles.profile}>
         <div className={styles.avatarNameContainer}>
-          <img className={styles.avatar} src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${userId}`} alt="avatar" />
+          <img className={styles.avatar} src={`${process.env.serverBaseUrl}/api/profile/avatar/${userId}`} alt="avatar" />
           <div className={styles.infoContainer}>
             <h1>{profile.username}</h1>
             <p>{profile.id}</p>
@@ -148,7 +148,7 @@ export default function Page() {
       {showFollowers && (<UserListModal userId={userId} type="followers" onClose={() => setShowFollowers(false)} />)}
       {showFollowing && (<UserListModal userId={userId} type="following" onClose={() => setShowFollowing(false)} />)}
 
-      <InfiniteScroll<Post> fetchContent={fetchUserPosts(userId)} renderItem={(post) => <PostBlock key={post.id} post={post} meRespon={null} />} />
+      <InfiniteScroll<Post> fetchContent={fetchUserPosts(userId)} renderItem={(post, idx, onItemDeleted) => <PostBlock key={post.id} post={post} curLogin={curLogin} onDeleted={onItemDeleted}/>} />
     </>
   );
 };

@@ -17,7 +17,7 @@ export default function SearchBar() {
     <form onSubmit={handleSearch} className={styles.searchBar}>
       <input
         type="text"
-        placeholder="Search posts..."
+        placeholder="Search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className={styles.searchInput}

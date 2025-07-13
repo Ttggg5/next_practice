@@ -27,7 +27,7 @@ export default function PageNavBar() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    fetch(`http://${window.location.hostname}:${process.env.serverPort}/api/auth/me`, { credentials: 'include' })
+    fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok)
           throw new Error('Failed to fetch user');
@@ -86,7 +86,7 @@ export default function PageNavBar() {
         <li className={styles.navBtn}>
           <div className={pagesIcon.profile}>
             <Link href={loginRespon?.isLoggedIn ? `/profile/${loginRespon?.userId}` : "/login"}>
-              {loginRespon?.isLoggedIn ? <img src={`http://${window.location.hostname}:${process.env.serverPort}/api/profile/avatar/${loginRespon?.userId}`} alt='Profile'/> : <IoPerson/>}
+              {loginRespon?.isLoggedIn ? <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${loginRespon?.userId}`} alt='Profile'/> : <IoPerson/>}
             </Link>
           </div>
         </li>
