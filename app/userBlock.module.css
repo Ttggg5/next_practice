@@ -22,7 +22,7 @@
 	background: var(--foreground);
 	color: var(--background);
 	border-radius: 100px;
-	padding: 2px 5px;
+	padding: 2px 10px;
 	width: fit-content;
 }
 

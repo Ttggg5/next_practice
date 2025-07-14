@@ -7,8 +7,9 @@ import { useEffect, useState } from 'react';
 import LazyVideo from './lazyVideo';
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa6";
-import PostOptions, { Option } from './postOptions';
+import PostOptions from './postOptions';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
+import CommentButton from './commentButton';
 
 export interface MeRespon {
   isLoggedIn: boolean,
@@ -27,6 +28,15 @@ export interface Post {
   username: string;
 }
 
+export interface Comment {
+  id: string;
+  user_id: string;
+  post_id: string;
+  content: string;
+  created_at: Date;
+  username: string;
+}
+
 const isImage = (filename: string) => /\.(jpe?g|png|gif|webp)$/i.test(filename);
 //const isVideo = (filename: string) => /\.(mp4|webm|ogg)$/i.test(filename);
 
@@ -42,11 +52,21 @@ export default function PostBlock({
   const [mediaPaths, setMediaPaths] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const addMessage = useMessageStore((state) => state.addMessage);
 
   const copyLink = () => {
-    addMessage('Link copied', MessageType.info);
-    navigator.clipboard.writeText(`${location.origin}/post/${post.id}`);
+    const el = document.createElement('textarea');
+    el.value = `${location.origin}/post/${post.id}`;
+    document.body.appendChild(el);
+    el.select();
+    el.setSelectionRange(0, el.value.length); // for ios
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    addMessage('Link coppied', MessageType.info);
+
+    //this is only for https
+    //navigator.clipboard.writeText(`${location.origin}/post/${post.id}`);
   };
 
   const deletePost = async () => {
@@ -229,8 +249,13 @@ export default function PostBlock({
       <small>{new Date(post.created_at).toLocaleString()}</small>
 
       <div className={styles.actionsBar}>
+        <CommentButton
+          postId={post.id}
+          count={post.comment_count}
+          curLogin={curLogin}
+        />
         <LikeButton isUserLogin={curLogin?.isLoggedIn ? true : false} count={post.like_count} postId={post.id}></LikeButton>
       </div>
     </div>
-  )
+  );
 }

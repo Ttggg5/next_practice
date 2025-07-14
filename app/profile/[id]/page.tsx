@@ -123,9 +123,9 @@ export default function Page() {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
           <div className={styles.followInfo}>
-            <p><button className={styles.followerBtn} onClick={() => setShowFollowers(true)}>{followCount.followerCount} Followers</button></p>
+            <p><button className={styles.followerBtn} onClick={() => { setShowFollowers(true); document.documentElement.style.overflow = 'hidden'; }}>{followCount.followerCount} Followers</button></p>
             <p>|</p>
-            <p><button className={styles.followingBtn} onClick={() => setShowFollowing(true)}>{followCount.followingCount} Following</button></p>
+            <p><button className={styles.followingBtn} onClick={() => { setShowFollowing(true); document.documentElement.style.overflow = 'hidden'; }}>{followCount.followingCount} Following</button></p>
           </div>
 
           {curLogin?.userId !== profile.id && <div style={{ alignSelf: 'end' }}><FollowButton curLogin={curLogin} followingUserId={userId} /></div>}
@@ -145,10 +145,10 @@ export default function Page() {
         )}
       </div>
 
-      {showFollowers && (<UserListModal userId={userId} type="followers" onClose={() => setShowFollowers(false)} />)}
-      {showFollowing && (<UserListModal userId={userId} type="following" onClose={() => setShowFollowing(false)} />)}
+      {showFollowers && (<UserListModal userId={userId} type="followers" onClose={() => { setShowFollowers(false); document.documentElement.style.overflow = ''; }} />)}
+      {showFollowing && (<UserListModal userId={userId} type="following" onClose={() => { setShowFollowing(false); document.documentElement.style.overflow = ''; }} />)}
 
-      <InfiniteScroll<Post> fetchContent={fetchUserPosts(userId)} renderItem={(post, idx, onItemDeleted) => <PostBlock key={post.id} post={post} curLogin={curLogin} onDeleted={onItemDeleted}/>} />
+      <InfiniteScroll<Post> fetchContent={fetchUserPosts(userId)} renderItem={(post, idx, onItemDeleted) => <PostBlock key={post.id} post={post} curLogin={curLogin} onDeleted={onItemDeleted} />} />
     </>
   );
 };

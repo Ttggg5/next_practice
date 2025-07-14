@@ -1,0 +1,125 @@
+/******** trigger */
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--foreground);
+  color: var(--background);
+  padding: 5px 10px;
+  border-radius: 100px;
+}
+
+.btn > button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn button svg {
+  color: var(--background);
+  font-size: 20px;
+}
+
+.btn button svg:hover {
+  color: var(--main);
+}
+
+.btn span {
+  font-weight: bold;
+}
+
+/******** modal overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--background-hover);
+  width: 90%;
+  height: 80vh;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem 1rem;
+  width: 100%;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.header button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.header button:hover {
+  color: indianred;
+}
+
+/* comment list area */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  margin-top: 10px;
+}
+
+/* input row */
+.inputRow {
+  display: flex;
+  gap: .5rem;
+  padding: .75rem 1rem;
+  border-top: 1px solid var(--foreground);
+}
+
+.inputRow input {
+  flex: 1;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 100px;
+  background: var(--foreground);
+  color: var(--background);
+  transition: all 0.3s;
+}
+
+.inputRow input:focus {
+  background: var(--foreground-hover);
+  outline: none;
+}
+
+.inputRow button {
+  padding: 5px 10px;
+  border-radius: 100px;
+  border: none;
+  color: var(--background);
+  background: var(--foreground);
+  transition: all 0.3s;
+}
+
+.inputRow button:hover {
+  background: var(--foreground-hover);
+}

@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
     serverPort: '5000',
     serverBaseUrl: `http://${address}:5000`,
   },
+  allowedDevOrigins: [address],
 };
 
 export default nextConfig;

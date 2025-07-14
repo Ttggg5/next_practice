@@ -71,7 +71,7 @@ export default function LikeButton({ isUserLogin, count, postId }: { isUserLogin
       }}>
         {isLiked ? <FaHeart style={{fontSize: '20px'}} /> : <FaRegHeart style={{fontSize: '20px'}}/>}
       </button>
-      <small className={styles.likeCount}>{likeCount}</small>
+      <span className={styles.likeCount}>{likeCount}</span>
     </div>
   );
 }
