@@ -52,7 +52,7 @@ a {
   aspect-ratio: 1;
   border-radius: 50%;
   border: 5px solid;
-  border-color: var(--foreground) var(--background);
+  border-color: #767676b2 transparent;
   animation: l1 1s infinite;
 }
 @keyframes l1 {to{transform: rotate(.5turn)}}
@@ -89,4 +89,27 @@ svg {
     width: 100%;
     min-width: 100px;
   }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-button {
+  background: transparent;
+  border-radius: 100px;
+  display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-color: #767676b2;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: transparent;
 }

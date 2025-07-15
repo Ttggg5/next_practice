@@ -93,7 +93,6 @@
   display: flex;
   gap: .5rem;
   padding: .75rem 1rem;
-  border-top: 1px solid var(--foreground);
 }
 
 .inputRow input {

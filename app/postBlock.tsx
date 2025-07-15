@@ -10,10 +10,15 @@ import { FaVideo } from "react-icons/fa6";
 import PostOptions from './postOptions';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import CommentButton from './commentButton';
+import { AnimatePresence, motion } from 'framer-motion';
+import Loading from './loading';
 
 export interface MeRespon {
-  isLoggedIn: boolean,
-  userId: string
+  isLoggedIn: boolean;
+  userId: string;
+  username: string;
+  email: string;
+  bio: string | null;
 }
 
 export interface Post {
@@ -52,6 +57,7 @@ export default function PostBlock({
   const [mediaPaths, setMediaPaths] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadingMedia, setLoadingMedia] = useState(true);
 
   const addMessage = useMessageStore((state) => state.addMessage);
 
@@ -112,19 +118,23 @@ export default function PostBlock({
   const openViewer = (index: number) => {
     document.documentElement.style.overflow = 'hidden';
     setCurrentIndex(index);
+    setLoadingMedia(true);
     setShowModal(true);
   };
 
   const closeViewer = () => {
     document.documentElement.style.overflow = '';
+    setLoadingMedia(false);
     setShowModal(false);
   };
 
   const prevMedia = () => {
+    setLoadingMedia(true);
     setCurrentIndex((prev) => (prev - 1 + mediaPaths.length) % mediaPaths.length);
   };
 
   const nextMedia = () => {
+    setLoadingMedia(true);
     setCurrentIndex((prev) => (prev + 1) % mediaPaths.length);
   };
 
@@ -210,6 +220,10 @@ export default function PostBlock({
                   e.stopPropagation();
                   prevMedia();
                 }}
+                style={{
+                  position: 'absolute',
+                  left: '20px'
+                }}
               >
                 <FaAngleLeft />
               </button>
@@ -221,6 +235,7 @@ export default function PostBlock({
                 src={`${process.env.serverBaseUrl}${mediaPaths[currentIndex]}`}
                 alt='modal-img'
                 style={{ maxHeight: '100vh', maxWidth: '90%', borderRadius: '10px' }}
+                onLoad={() => setLoadingMedia(false)}
               />
             ) : (
               <video
@@ -228,8 +243,11 @@ export default function PostBlock({
                 controls
                 preload='metadata'
                 style={{ maxWidth: '80%', maxHeight: '100vh' }}
+                onLoadedData={() => setLoadingMedia(false)}
               />
             )}
+
+            {loadingMedia && <div style={{ position: 'absolute' }}><Loading /></div>}
 
             {mediaPaths.length > 1 && (
               <button
@@ -237,6 +255,10 @@ export default function PostBlock({
                 onClick={(e) => {
                   e.stopPropagation();
                   nextMedia();
+                }}
+                style={{
+                  position: 'absolute',
+                  right: '20px'
                 }}
               >
                 <FaAngleRight />

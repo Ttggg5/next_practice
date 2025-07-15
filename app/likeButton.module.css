@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   color: var(--background);
-  margin: 0 15px;
   background: var(--foreground);
   border-radius: 100px;
   padding: 5px 10px;

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Loading from '@/app/loading';
 import styles from './page.module.css';
@@ -12,6 +12,7 @@ import { MdEdit } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 import FollowButton from '@/app/followButton';
 import UserListModal from '../userFollowListModal';
+import Link from 'next/link';
 
 interface Profile {
   id: string;
@@ -40,8 +41,12 @@ export default function Page() {
   const [showFollowing, setShowFollowing] = useState(false);
 
   useEffect(() => {
+    document.documentElement.style.overflow = '';
+  }, []);
+
+  useEffect(() => {
     const fetchFollowCount = async () => {
-      const res = await fetch(`http://${location.hostname}:${process.env.serverPort}/api/user/${encodeURIComponent(userId)}/follow-count`);
+      const res = await fetch(`${process.env.serverBaseUrl}/api/user/${encodeURIComponent(userId)}/follow-count`);
       const data = await res.json();
       setFollowCount(data);
     };
@@ -102,10 +107,11 @@ export default function Page() {
     addMessage(error, MessageType.error);
     return <></>;
   }
+
   if (!profile) {
     return (
       <div className={styles.page}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>Loading Profile<Loading></Loading></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>Loading Profile<Loading /></div>
       </div>
     );
   };
@@ -123,15 +129,22 @@ export default function Page() {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
           <div className={styles.followInfo}>
-            <p><button className={styles.followerBtn} onClick={() => { setShowFollowers(true); document.documentElement.style.overflow = 'hidden'; }}>{followCount.followerCount} Followers</button></p>
+            <p><button className={styles.followerBtn} onClick={() => {
+              setShowFollowers(true);
+              document.documentElement.style.overflow = 'hidden';
+            }}>{followCount.followerCount} Followers</button></p>
             <p>|</p>
-            <p><button className={styles.followingBtn} onClick={() => { setShowFollowing(true); document.documentElement.style.overflow = 'hidden'; }}>{followCount.followingCount} Following</button></p>
+            <p><button className={styles.followingBtn} onClick={() => {
+              setShowFollowing(true); document.documentElement.style.overflow = 'hidden';
+            }}>{followCount.followingCount} Following</button></p>
           </div>
 
           {curLogin?.userId !== profile.id && <div style={{ alignSelf: 'end' }}><FollowButton curLogin={curLogin} followingUserId={userId} /></div>}
         </div>
 
-        <p className={styles.createDate}><BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}</p>
+        <p className={styles.createDate}>
+          <BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}
+        </p>
 
         <div className={styles.bio}>
           {profile.bio ? <p>{profile.bio}</p> : <p>Nothing has been written here.</p>}
@@ -139,7 +152,7 @@ export default function Page() {
 
         {curLogin?.userId === profile.id && (
           <div className={styles.functionBtns}>
-            <button className={styles.editBtn}><MdEdit style={{ marginRight: '5px' }} />Edit profile</button>
+            <Link className={styles.editBtn} href={'/profile/edit'}><MdEdit style={{ marginRight: '5px' }} />Edit profile</Link>
             <button className={styles.logoutBtn} onClick={handleLogout}><TbLogout2 style={{ marginRight: '5px' }} />Logout</button>
           </div>
         )}
