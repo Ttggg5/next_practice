@@ -142,13 +142,13 @@ export default function Page() {
           {curLogin?.userId !== profile.id && <div style={{ alignSelf: 'end' }}><FollowButton curLogin={curLogin} followingUserId={userId} /></div>}
         </div>
 
-        <p className={styles.createDate}>
-          <BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}
-        </p>
-
         <div className={styles.bio}>
           {profile.bio ? <p>{profile.bio}</p> : <p>Nothing has been written here.</p>}
         </div>
+
+        <p className={styles.createDate}>
+          <BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}
+        </p>
 
         {curLogin?.userId === profile.id && (
           <div className={styles.functionBtns}>

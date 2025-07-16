@@ -1,7 +1,8 @@
 .wrapper {
   display: flex;
-  gap: .75rem;
-  margin-bottom: 1rem;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
 }
 
 .avatar {
@@ -12,7 +13,7 @@
 }
 
 .body {
-  flex: 1;
+  flex-grow: 1;
 }
 
 .body > a {
@@ -39,4 +40,18 @@
 
 .body > small {
   color: gray;
+}
+
+.deleteBtn {
+  justify-self: end;
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--foreground);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  color: indianred;
 }

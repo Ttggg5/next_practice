@@ -2,14 +2,35 @@
 
 import Cropper from 'react-easy-crop';
 import { useCallback, useState } from 'react';
-import getCroppedBlob from './getCroppedBlob';      // helper below
 import styles from './avatarCropper.module.css';
 
 interface Props {
-  src: string;                        // original file URL
+  src: string; // original file URL
   onCancel: () => void;
   onCropped: (blob: Blob, previewUrl: string) => void;
 }
+
+function getCroppedBlob(src: string, area: { x: number; y: number; width: number; height: number }): Promise<Blob> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = area.width;
+      canvas.height = area.height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(
+        img,
+        area.x, area.y, area.width, area.height, // from original
+        0, 0, area.width, area.height  // to canvas
+      );
+      canvas.toBlob((blob) => {
+        resolve(blob!);
+      }, 'image/jpeg', 0.96);
+    };
+  });
+}
+
 
 export default function AvatarCropper({ src, onCancel, onCropped }: Props) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -38,6 +59,7 @@ export default function AvatarCropper({ src, onCancel, onCropped }: Props) {
           onCropComplete={onCropComplete}
         />
         <div className={styles.controls}>
+          <button className={styles.btn} onClick={onCancel}>Cancel</button>
           <input
             type="range"
             min={1}
@@ -46,8 +68,7 @@ export default function AvatarCropper({ src, onCancel, onCropped }: Props) {
             value={zoom}
             onChange={(e) => setZoom(+e.target.value)}
           />
-          <button onClick={handleDone}>Done</button>
-          <button onClick={onCancel}>Cancel</button>
+          <button className={styles.btn} onClick={handleDone}>Done</button>
         </div>
       </div>
     </div>

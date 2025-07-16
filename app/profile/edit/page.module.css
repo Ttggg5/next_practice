@@ -9,9 +9,83 @@
 }
 
 .avatar {
-  width: 96px;
-  height: 96px;
+  display: flex;
+  align-items: end;
+}
+
+.avatar > img {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  margin: .5rem 0;
+  margin: 10px 0;
+}
+
+.avatar > button {
+  border: 5px solid var(--background);
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  background: var(--foreground);
+  color: var(--background);
+  cursor: pointer;
+  margin-left: -50px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  transition: all 0.3s;
+}
+
+.avatar > button:hover {
+  background: var(--foreground-hover);
+}
+
+.username {
+  padding: 10px 20px;
+}
+
+.username input {
+  border-radius: 20px;
+  border: none;
+  background: var(--foreground);
+  padding: 5px 10px;
+  color: var(--background);
+  outline: none;
+  min-width: 300px;
+  width: 100%;
+}
+
+.username input:focus {
+  background: var(--foreground-hover);
+}
+
+.bio {
+  padding: 10px 20px;
+}
+
+.bio textarea {
+  border-radius: 10px;
+  resize: none;
+  min-width: 300px;
+  padding: 10px;
+  width: 100%;
+}
+
+.submitBtn {
+  margin: 10px 20px;
+  padding: 5px;
+  background: var(--foreground);
+  cursor: pointer;
+  border: none;
+  border-radius: 100px;
+  color: var(--background);
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+.submitBtn:hover {
+  background: var(--foreground-hover);
+}
+
+.submitBtn:disabled {
+  background: gray;
 }

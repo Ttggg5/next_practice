@@ -1,0 +1,15 @@
+.wrap {
+  padding: .75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.read {
+  opacity: .6;
+}
+
+.wrap small {
+  display: block;
+  font-size: .75rem;
+  color: #666;
+  margin-top: 2px;
+}

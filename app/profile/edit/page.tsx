@@ -5,6 +5,8 @@ import styles from './page.module.css';
 import { MeRespon } from '@/app/postBlock';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import AvatarCropper from './avatarCropper';
+import { MdEdit } from "react-icons/md";
+import Loading from '@/app/loading';
 
 export default function Page() {
   const [me, setMe] = useState<MeRespon | null>(null);
@@ -31,10 +33,18 @@ export default function Page() {
       });
   }, []);
 
-  const onFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = (e: any) => {
     const f = e.target.files?.[0];
     if (f) setCropSrc(URL.createObjectURL(f)); // open crop modal
-  };
+  }
+
+  const chooseFile = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*'
+    input.addEventListener('change', onFileChange);
+    input.click();
+  }
 
   const handleCropped = (blob: Blob, previewUrl: string) => {
     setFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
@@ -72,39 +82,37 @@ export default function Page() {
     <div className={styles.wrap}>
       <h2>Edit profile</h2>
       <form onSubmit={submit} className={styles.form}>
-        <label>
-          Avatar<br />
+        <div className={styles.avatar}>
           <img
             src={
               preview ??
               `${process.env.serverBaseUrl}/api/profile/avatar/${encodeURIComponent(me.userId)}?${Date.now()}`
             }
             alt='avatar'
-            className={styles.avatar}
-          /><br />
-          <input type='file' accept='image/*' onChange={onFile} />
-        </label>
+          />
+          <button type='button' onClick={chooseFile}><MdEdit /></button>
+        </div>
 
-        <label>
+        <label className={styles.username}>
           Username<br />
           <input value={username} onChange={(e) => setUsername(e.target.value)} max={50} />
         </label>
 
-        <label>
+        <label className={styles.bio}>
           Bio<br />
-          <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={4} maxLength={300} />
+          <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={6} maxLength={300} />
         </label>
 
-        <button type='submit' disabled={saving}>{saving ? 'Saving…' : 'Save'}</button>
+        <button className={styles.submitBtn} type='submit' disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
       </form>
 
       {cropSrc && (
-            <AvatarCropper
-              src={cropSrc}
-              onCancel={() => setCropSrc(null)}
-              onCropped={handleCropped}
-            />
-          )}
+        <AvatarCropper
+          src={cropSrc}
+          onCancel={() => setCropSrc(null)}
+          onCropped={handleCropped}
+        />
+      )}
     </div>
   );
 }

@@ -247,7 +247,7 @@ export default function PostBlock({
               />
             )}
 
-            {loadingMedia && <div style={{ position: 'absolute' }}><Loading /></div>}
+            {loadingMedia && <div style={{ position: 'absolute', width: '100%', height: '100%', background: '#000000a2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Loading /></div>}
 
             {mediaPaths.length > 1 && (
               <button

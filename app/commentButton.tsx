@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import InfiniteScroll from '@/app/infiniteScroll';
 import CommentBlock, { Comment } from '@/app/commentBlock';
 import styles from './commentButton.module.css';
@@ -81,7 +81,10 @@ export default function CommentButton({ postId, count, curLogin }: Props) {
               <InfiniteScroll<Comment>
                 key={`comments-${postId}-${cmtCount}`} // remount on refresh
                 fetchContent={fetchComments}
-                renderItem={(c) => <CommentBlock key={c.id} comment={c} />}
+                renderItem={(c, idx, onItemDeleted) => <CommentBlock key={c.id} comment={c} currentUserId={curLogin?.userId} onDeleted={() => {
+                  onItemDeleted(c.id);
+                  setCmtCount((prev) => prev - 1);
+                }}/>}
               />
             </section>
 
