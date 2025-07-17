@@ -4,47 +4,55 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from '@/app/infiniteScroll';
 import NotificationBlock, { Notif } from '@/app/notificationBlock';
 import styles from './page.module.css';
+import { MeRespon } from '../postBlock';
 
 export default function Page() {
-  const [unreadIds, setUnreadIds] = useState<number[]>([]);
+  const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
+  const [key, setkey] = useState<string>('0');
+
+  useEffect(() => {
+    fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
+      .then(async (res) => {
+        if (!res.ok)
+          throw new Error('Failed to fetch user');
+        return res.json();
+      })
+      .then((data: MeRespon) => setCurLogin(data));
+  }, []);
+
+  const readAll = () => {
+    fetch(`${process.env.serverBaseUrl}/api/notifications/mark-read-all`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ userId: curLogin?.userId })
+    })
+      .then(() => setkey(prev => prev === '0' ? '1' : '0'));
+  };
 
   /* --- fetch paged notifications --- */
   const fetchNotifs = async (page: number) => {
     const res = await fetch(`${process.env.serverBaseUrl}/api/notifications?page=${page}`, {
       credentials: 'include',
-      cache: 'no-store',
     });
     const data: Notif[] = await res.json();
-
-    // collect unread ids (for later mark‑read)
-    setUnreadIds((prev) => [
-      ...prev,
-      ...data.filter((n) => !n.is_read).map((n) => n.id),
-    ]);
 
     return data;
   };
 
-  /* --- mark all fetched unread as read on unmount --- */
-  useEffect(() => {
-    return () => {
-      if (unreadIds.length) {
-        fetch(`${process.env.serverBaseUrl}/api/notifications/mark-read`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ ids: unreadIds }),
-        });
-      }
-    };
-  }, [unreadIds]);
-
   return (
     <>
-      <InfiniteScroll<Notif>
-        fetchContent={fetchNotifs}
-        renderItem={(n) => <NotificationBlock key={n.id} notif={n} />}
-      />
+      {curLogin?.isLoggedIn && (
+        <>
+          <button className={styles.readALlBtn} onClick={readAll}>Read all</button>
+
+          <InfiniteScroll<Notif>
+            key={key}
+            fetchContent={fetchNotifs}
+            renderItem={(n) => <NotificationBlock key={n.id} notif={n} />}
+          />
+        </>
+      )}
     </>
   );
 }

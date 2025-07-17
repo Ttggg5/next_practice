@@ -1,15 +1,47 @@
 .wrap {
   padding: .75rem 0;
-  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.wrap small {
+  display: block;
+  font-size: .75rem;
+  color: gray;
+  margin-top: 2px;
 }
 
 .read {
   opacity: .6;
 }
 
-.wrap small {
-  display: block;
-  font-size: .75rem;
-  color: #666;
-  margin-top: 2px;
+.avatar {
+  border-radius: 50%;
+  width: 40px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.userInfo strong {
+  background: var(--foreground);
+  border-radius: 100px;
+  padding: 2px 6px;
+  color: var(--background);
+}
+
+.content {
+  margin-left: 10px;
+  flex-grow: 1;
+}
+
+.dot {
+  border-radius: 50%;
+  background: var(--main);
+  width: 10px;
+  height: 10px;
 }

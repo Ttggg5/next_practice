@@ -14,13 +14,15 @@ export interface Comment {
 }
 
 interface Props {
-  comment: Comment;
+  comment: Comment | null;
   currentUserId?: string;
   onDeleted?: (id: string) => void;
 }
 
 export default function CommentBlock({ comment, currentUserId, onDeleted }: Props) {
   const addMessage = useMessageStore((state) => state.addMessage);
+  
+  if (!comment) return <>Comment not found!</>;
   const isOwner = currentUserId === comment.user_id;
 
   const handleDelete = async () => {

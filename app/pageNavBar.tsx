@@ -67,7 +67,7 @@ export default function PageNavBar() {
 
         <li className={styles.navBtn}>
           <div className={pagesIcon.notification}>
-            <Link href='/notification'><FaBell /></Link>
+            <Link href={loginRespon?.isLoggedIn ? '/notification' : '/login'}><FaBell /></Link>
           </div>
         </li>
 
@@ -79,7 +79,7 @@ export default function PageNavBar() {
 
         <li className={styles.navBtn}>
           <div className={pagesIcon.chat}>
-            <Link href='/chat'><IoIosChatbubbles /></Link>
+            <Link href={loginRespon?.isLoggedIn ? '/chat' : '/login'}><IoIosChatbubbles /></Link>
           </div>
         </li>
 

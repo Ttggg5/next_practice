@@ -1,0 +1,15 @@
+.readALlBtn {
+  background: var(--foreground);
+  color: var(--background);
+  border-radius: 100px;
+  padding: 5px 10px;
+  font-weight: bold;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  align-self: end;
+}
+
+.readALlBtn:hover {
+  background: var(--foreground-hover);
+}

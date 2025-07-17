@@ -10,7 +10,6 @@ import { FaVideo } from "react-icons/fa6";
 import PostOptions from './postOptions';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import CommentButton from './commentButton';
-import { AnimatePresence, motion } from 'framer-motion';
 import Loading from './loading';
 
 export interface MeRespon {
