@@ -2,13 +2,8 @@
 
 import styles from './page.module.css';
 import InfiniteScroll from './infiniteScroll';
-import PostBlock, { Post } from './postBlock';
+import PostBlock, { MeRespon, Post } from './postBlock';
 import { useEffect, useState } from 'react';
-
-interface MeRespon {
-  isLoggedIn: boolean,
-  userId: string
-}
 
 const fetchNewestPosts = async (page: number) => {
   const res = await fetch(`${process.env.serverBaseUrl}/api/posts/newest?page=${page}`, {

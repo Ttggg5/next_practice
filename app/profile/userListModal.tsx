@@ -1,6 +1,6 @@
 'use client';
 
-import styles from './userFollowListModal.module.css';
+import styles from './userListModal.module.css';
 import { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
 import { MeRespon } from '../postBlock';
@@ -31,7 +31,7 @@ export default function UserListModal({ userId, type, onClose }: Props) {
   }, []);
 
   const fetchUsers = async (page: number) => {
-    const res = await fetch(`http://${location.hostname}:${process.env.serverPort}/api/user/${encodeURIComponent(userId)}/${type}?page=${page}`, {
+    const res = await fetch(`${process.env.serverBaseUrl}/api/user/${encodeURIComponent(userId)}/${type}?page=${page}`, {
       credentials: 'include',
     });
     return res.json() as Promise<User[]>;

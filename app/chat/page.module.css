@@ -1,0 +1,43 @@
+.wrapper {
+  width: 100%;
+  height: 70vh;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 2fr;
+}
+
+.userBlock {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background: var(--background);
+  color: var(--forground);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.userBlock:hover {
+  background: var(--background-hover);
+}
+
+.userBlock img {
+  width: 40px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.userBlock div {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.userBlock div small {
+  color: gray;
+}
+
+.selected {
+  background: var(--main);
+}

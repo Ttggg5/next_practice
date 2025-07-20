@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './followButton.module.css';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import { MeRespon } from '@/app/postBlock';
+import { RiUserFollowFill, RiUserUnfollowFill  } from "react-icons/ri";
 
 export default function FollowButton({curLogin, followingUserId}: {curLogin: MeRespon | null, followingUserId: string}) {
   const addMessage = useMessageStore((state) => state.addMessage);
@@ -12,7 +13,7 @@ export default function FollowButton({curLogin, followingUserId}: {curLogin: MeR
   useEffect(() => {
     if (!curLogin?.isLoggedIn || !followingUserId) return;
 
-    fetch(`http://${location.hostname}:${process.env.serverPort}/api/user/following-status`, {
+    fetch(`${process.env.serverBaseUrl}/api/user/following-status`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -29,7 +30,7 @@ export default function FollowButton({curLogin, followingUserId}: {curLogin: MeR
     if (!curLogin?.isLoggedIn) return addMessage("Please login", MessageType.error);
 
     const url = isFollowing ? 'unfollow' : 'follow';
-    const res = await fetch(`http://${location.hostname}:${process.env.serverPort}/api/user/${url}`, {
+    const res = await fetch(`${process.env.serverBaseUrl}/api/user/${url}`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -43,7 +44,7 @@ export default function FollowButton({curLogin, followingUserId}: {curLogin: MeR
 
   return (
     <button className={styles.followBtn} onClick={toggleFollow}>
-      {isFollowing ? (<p style={{ color: 'indianred' }}>Unfollow</p>) : 'Follow'}
+      {isFollowing ? (<div style={{ color: 'indianred' }}><RiUserUnfollowFill style={{ fontSize: '16px' }} />Unfollow</div>) : (<div><RiUserFollowFill style={{ fontSize: '16px' }} />Follow</div>)}
     </button>
   );
 }

@@ -13,7 +13,7 @@ export default function UserBlock({curLogin, user}: {curLogin: MeRespon | null, 
     <div className={styles.userItem}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <img
-          src={`http://${location.hostname}:${process.env.serverPort}/api/profile/avatar/${user.id}`}
+          src={`${process.env.serverBaseUrl}/api/profile/avatar/${user.id}`}
           alt="avatar"
         />
 

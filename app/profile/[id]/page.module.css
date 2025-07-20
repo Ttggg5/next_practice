@@ -97,6 +97,23 @@
   align-items: center;
 }
 
+.chatBtn {
+  background: var(--foreground);
+  color: var(--background);
+  border-radius: 100px;
+  padding: 5px 20px;
+  margin-top: 10px;
+  transition: all 0.3s;
+  text-align: center;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.chatBtn:hover {
+  background: var(--foreground-hover);
+}
+
 .editBtn {
   background: var(--foreground);
   color: var(--background);

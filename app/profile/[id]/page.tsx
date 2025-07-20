@@ -11,10 +11,13 @@ import { BiCalendar } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 import FollowButton from '@/app/followButton';
-import UserListModal from '../userFollowListModal';
+import UserListModal from '../userListModal';
 import Link from 'next/link';
+import { IoChatbubblesSharp } from "react-icons/io5";
+import ChatBox from '@/app/chatBox';
+import { User } from '@/app/userBlock';
 
-interface Profile {
+export interface Profile {
   id: string;
   username: string;
   email: string;
@@ -33,12 +36,16 @@ export default function Page() {
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [error, setError] = useState<string | null>(null);
+
   const addMessage = useMessageStore((state) => state.addMessage);
+
   const params = useParams();
   const userId = decodeURIComponent(params.id as string);
   const [followCount, setFollowCount] = useState({ followerCount: 0, followingCount: 0 });
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+
+  const [showChatbox, setShowChatbox] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.overflow = '';
@@ -135,7 +142,8 @@ export default function Page() {
             }}>{followCount.followerCount} Followers</button></p>
             <p>|</p>
             <p><button className={styles.followingBtn} onClick={() => {
-              setShowFollowing(true); document.documentElement.style.overflow = 'hidden';
+              setShowFollowing(true);
+              document.documentElement.style.overflow = 'hidden';
             }}>{followCount.followingCount} Following</button></p>
           </div>
 
@@ -145,6 +153,8 @@ export default function Page() {
         <div className={styles.bio}>
           {profile.bio ? <p>{profile.bio}</p> : <p>Nothing has been written here.</p>}
         </div>
+
+        {curLogin?.userId !== profile.id && <button className={styles.chatBtn} onClick={() => {setShowChatbox(true);document.documentElement.style.overflow = 'hidden';}}><IoChatbubblesSharp /> Chat</button>}
 
         <p className={styles.createDate}>
           <BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}
@@ -160,6 +170,13 @@ export default function Page() {
 
       {showFollowers && (<UserListModal userId={userId} type="followers" onClose={() => { setShowFollowers(false); document.documentElement.style.overflow = ''; }} />)}
       {showFollowing && (<UserListModal userId={userId} type="following" onClose={() => { setShowFollowing(false); document.documentElement.style.overflow = ''; }} />)}
+      {showChatbox && (
+        <div style={{ position: 'fixed', top: 0, left: 0, background: '#0000008b', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => {setShowChatbox(false); document.documentElement.style.overflow = '';}}>
+          <div style={{ background: 'var(--background-hover)', maxWidth: '500px', width: '90%', height: '75vh', borderRadius: '10px', padding: '10px' }} onClick={(e) => e.stopPropagation()}>
+            <ChatBox targetUser={{id: profile.id, username: profile.username} as User} />
+          </div>
+        </div>
+        )}
 
       <InfiniteScroll<Post> fetchContent={fetchUserPosts(userId)} renderItem={(post, idx, onItemDeleted) => <PostBlock key={post.id} post={post} curLogin={curLogin} onDeleted={onItemDeleted} />} />
     </>

@@ -7,8 +7,19 @@
   font-weight: bold;
   padding: 5px;
   cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .followBtn:hover {
   background: var(--foreground-hover);
+}
+
+.followBtn div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
