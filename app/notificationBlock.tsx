@@ -9,7 +9,7 @@ export enum UserAction{
 }
 
 export interface Notif {
-  id: number;
+  id: string;
   user_id: string; // receiver
   actor_id: string; // sender
   verb: UserAction;
@@ -42,7 +42,7 @@ export default function NotificationBlock({ notif }: { notif: Notif }) {
 
         <div className={styles.content}>
           {notif.verb === UserAction.posted ? 'Published a new post.' : 'Commented on a post.'}
-          <Link href={`/post/${notif.post_id}?cId=${notif.comment_id}`} onClick={handleRead} style={{ color: 'var(--main)', textDecoration: 'underline', marginLeft: '10px' }}>View</Link>
+          <Link href={notif.comment_id ? `/post/${notif.post_id}?cId=${notif.comment_id}` : `/post/${notif.post_id}`} onClick={handleRead} style={{ color: 'var(--main)', textDecoration: 'underline', marginLeft: '10px' }}>View</Link>
         </div>
 
         {!notif.is_read && <div className={styles.dot}></div>}

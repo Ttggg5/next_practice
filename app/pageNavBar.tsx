@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import styles from './pageNavBar.module.css';
 import { IoAddOutline } from "react-icons/io5";
@@ -9,24 +9,31 @@ import { HiHome } from "react-icons/hi2";
 import { FaBell } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoPerson } from "react-icons/io5";
+import socket from '@/lib/socket';
+import { useMessageStore, MessageType } from '@/store/useMessageStore';
+import { Notif, UserAction } from './notificationBlock';
 
 interface Respon {
   isLoggedIn: boolean,
   userId: string
 }
 
+enum Pages {
+  home = 'home',
+  notification = 'notification',
+  chat = 'chat',
+  profile = 'profile',
+  others = 'others',
+}
+
 export default function PageNavBar() {
-  const [loginRespon, setLoginRespon] = useState<Respon | null>(null);
-  const [pagesIcon, setPagesIcon] = useState({ home: "", notification: "", chat: "", profile: "" });
-  const [currentPage, setCurrentPage] = useState<string>("");
-  const fetchedRef = useRef(false); // ✅ block duplicate fetch
+  const addMessage = useMessageStore((state) => state.addMessage);
   
+  const [curLogin, setCurLogin] = useState<Respon | null>(null);
+  const [selected, setSelected] = useState<Pages>(Pages.others);
   const pathname = usePathname();
 
   useEffect(() => {
-    if (fetchedRef.current) return;
-    fetchedRef.current = true;
-
     fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
       .then(async (res) => {
         if (!res.ok)
@@ -35,58 +42,75 @@ export default function PageNavBar() {
         return res.json();
       })
       .then((data: Respon) => {
-        setLoginRespon(data);
+        setCurLogin(data);
       });
-  });
+  }, []);
 
   useEffect(() => {
-    if (currentPage === pathname)
-      return;
-
-    setCurrentPage(pathname);
     if (pathname === '/')
-      setPagesIcon({home: styles.selected, notification: "", chat: "", profile: ""});
+      setSelected(Pages.home);
     else if (pathname === '/notification')
-      setPagesIcon({home: "", notification: styles.selected, chat: "", profile: ""});
+      setSelected(Pages.notification);
     else if (pathname === '/chat')
-      setPagesIcon({home: "", notification: "", chat: styles.selected, profile: ""});
-    else if (pathname.startsWith('/profile') && loginRespon?.userId === pathname.split('/')[2])
-      setPagesIcon({home: "", notification: "", chat: "", profile: styles.selected});
+      setSelected(Pages.chat);
+    else if (pathname.startsWith('/profile') && curLogin?.userId === pathname.split('/')[2])
+      setSelected(Pages.profile);
     else
-      setPagesIcon({home: "", notification: "", chat: "", profile: ""});
-  });
+      setSelected(Pages.others);
+  }, [pathname]);
+
+  // Notification socket
+  useEffect(() => {
+    if (!curLogin?.isLoggedIn) return;
+
+    socket.connect();
+    socket.emit('register', curLogin?.userId);
+
+    const handleReceiveNotification = (noti: Notif) => {
+      const action = noti.verb === UserAction.posted ? 'post someting' : 'comment the post';
+      addMessage(`${noti.actor_id} ${action}`, MessageType.info);
+    };
+    socket.on('notification', handleReceiveNotification);
+
+    return () => {
+      socket.off('notification', handleReceiveNotification);
+      socket.disconnect();
+    };
+  }, [curLogin]);
 
   return (
     <nav className={styles.pageNav}>
       <ul>
         <li className={styles.navBtn}>
-          <div className={pagesIcon.home}>
+          <div className={selected === Pages.home ? styles.selected : ''}>
             <Link href='/'><HiHome /></Link>
           </div>
         </li>
 
         <li className={styles.navBtn}>
-          <div className={pagesIcon.notification}>
-            <Link href={loginRespon?.isLoggedIn ? '/notification' : '/login'}><FaBell /></Link>
+          <div className={selected === Pages.notification ? styles.selected : ''}>
+            <Link href={curLogin?.isLoggedIn ? '/notification' : '/login'}><FaBell /></Link>
           </div>
+          {/*<p className={styles.dot}></p>*/}
         </li>
 
         <li>
           <div className={styles.createBtn}>
-            <Link href={loginRespon?.isLoggedIn ? '/create-post' : '/login'}><IoAddOutline /></Link>
+            <Link href={curLogin?.isLoggedIn ? '/create-post' : '/login'}><IoAddOutline /></Link>
           </div>
         </li>
 
         <li className={styles.navBtn}>
-          <div className={pagesIcon.chat}>
-            <Link href={loginRespon?.isLoggedIn ? '/chat' : '/login'}><IoIosChatbubbles /></Link>
+          <div className={selected === Pages.chat ? styles.selected : ''}>
+            <Link href={curLogin?.isLoggedIn ? '/chat' : '/login'}><IoIosChatbubbles /></Link>
           </div>
+          {/*<p className={styles.dot}></p>*/}
         </li>
 
         <li className={styles.navBtn}>
-          <div className={pagesIcon.profile}>
-            <Link href={loginRespon?.isLoggedIn ? `/profile/${loginRespon?.userId}` : "/login"}>
-              {loginRespon?.isLoggedIn ? <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${loginRespon?.userId}`} alt='Profile'/> : <IoPerson/>}
+          <div className={selected === Pages.profile ? styles.selected : ''}>
+            <Link href={curLogin?.isLoggedIn ? `/profile/${curLogin?.userId}` : "/login"}>
+              {curLogin?.isLoggedIn ? <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${curLogin?.userId}`} alt='Profile'/> : <IoPerson/>}
             </Link>
           </div>
         </li>

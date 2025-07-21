@@ -5,13 +5,9 @@ import { MeRespon } from '../postBlock';
 import { User } from '../userBlock';
 import InfiniteScroll from '../infiniteScroll';
 import styles from './page.module.css';
-import { useSearchParams } from 'next/navigation';
 import ChatBox from '../chatBox';
 
 export default function Page() {
-  const params = useSearchParams();
-  const targetUserId = params.get('targetUserId');
-
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -51,7 +47,7 @@ export default function Page() {
               }}
             />
 
-            {selectedUser && <ChatBox targetUser={selectedUser} />}
+            {selectedUser && <ChatBox key={selectedUser.id} targetUser={selectedUser} />}
           </div>
         )
       }

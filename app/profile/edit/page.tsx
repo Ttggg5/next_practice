@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
 import styles from './page.module.css';
 import { MeRespon } from '@/app/postBlock';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import AvatarCropper from './avatarCropper';
 import { MdEdit } from "react-icons/md";
-import Loading from '@/app/loading';
 
 export default function Page() {
   const [me, setMe] = useState<MeRespon | null>(null);
@@ -33,7 +32,7 @@ export default function Page() {
       });
   }, []);
 
-  const onFileChange = (e: any) => {
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (f) setCropSrc(URL.createObjectURL(f)); // open crop modal
   }
@@ -42,7 +41,7 @@ export default function Page() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*'
-    input.addEventListener('change', onFileChange);
+    input.addEventListener('change', (e) => onFileChange(e as unknown as ChangeEvent<HTMLInputElement>));
     input.click();
   }
 

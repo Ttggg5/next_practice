@@ -1,6 +1,5 @@
 'use client'
 
-import styles from './page.module.css';
 import InfiniteScroll from './infiniteScroll';
 import PostBlock, { MeRespon, Post } from './postBlock';
 import { useEffect, useState } from 'react';

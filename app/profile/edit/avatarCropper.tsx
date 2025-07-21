@@ -4,6 +4,13 @@ import Cropper from 'react-easy-crop';
 import { useCallback, useState } from 'react';
 import styles from './avatarCropper.module.css';
 
+interface Area {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 interface Props {
   src: string; // original file URL
   onCancel: () => void;
@@ -35,9 +42,9 @@ function getCroppedBlob(src: string, area: { x: number; y: number; width: number
 export default function AvatarCropper({ src, onCancel, onCropped }: Props) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedArea, setCA] = useState<any>(null);
+  const [croppedArea, setCA] = useState<Area | null>(null);
 
-  const onCropComplete = useCallback((_area: any, areaPixels: any) => setCA(areaPixels), []);
+  const onCropComplete = useCallback((_area: Area, areaPixels: Area) => setCA(areaPixels), []);
 
   const handleDone = async () => {
     if (!croppedArea) return;

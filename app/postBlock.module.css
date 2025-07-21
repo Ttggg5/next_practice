@@ -6,13 +6,13 @@
   width: 100%;
 }
 
-.post>small {
+.post > small {
   align-self: flex-end;
   color: gray;
   margin-top: 10px;
 }
 
-.post>p {
+.post > p {
   margin: 10px 30px 0 30px;
   overflow-wrap: break-word;
 }
@@ -29,7 +29,7 @@
   border-radius: 50%;
 }
 
-.postUser>a {
+.postUser > a {
   display: flex;
   flex-direction: column;
   margin-left: 10px;

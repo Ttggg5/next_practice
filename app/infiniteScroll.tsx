@@ -4,13 +4,13 @@ import { useEffect, useState, useRef, useCallback, ReactNode } from 'react';
 import Loading from './loading';
 import styles from './infiniteScroll.module.css';
 
-export interface InfiniteScrollProps<T> {
+export interface InfiniteScrollProps<T extends { id: string }> {
   fetchContent: (page: number) => Promise<T[]>;
   renderItem: (item: T, index: number, onItemDeleted: (id: string) => void) => ReactNode;
   rootMargin?: string; // optional: how early to pre‑load (default 300px)
 }
 
-export default function InfiniteScroll<T>({
+export default function InfiniteScroll<T extends { id: string }>({
   fetchContent,
   renderItem,
   rootMargin = '300px'
@@ -25,7 +25,7 @@ export default function InfiniteScroll<T>({
   const sentryRef = useRef<HTMLDivElement | null>(null);
 
   const handleDeleted = (id: string) =>{
-    setItems(prev => prev.filter(item => (item as any).id !== id));
+    setItems(prev => prev.filter(item => item.id !== id));
   }
 
   const loadMore = useCallback(async () => {

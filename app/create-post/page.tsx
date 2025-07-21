@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import { MeRespon } from '@/app/postBlock';
 import styles from './page.module.css';

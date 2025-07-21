@@ -154,7 +154,11 @@ export default function Page() {
           {profile.bio ? <p>{profile.bio}</p> : <p>Nothing has been written here.</p>}
         </div>
 
-        {curLogin?.userId !== profile.id && <button className={styles.chatBtn} onClick={() => {setShowChatbox(true);document.documentElement.style.overflow = 'hidden';}}><IoChatbubblesSharp /> Chat</button>}
+        {curLogin?.userId !== profile.id && <button className={styles.chatBtn} onClick={() => {
+          if (!curLogin?.isLoggedIn) return addMessage('Please login', MessageType.error);
+          setShowChatbox(true);
+          document.documentElement.style.overflow = 'hidden';
+        }}><IoChatbubblesSharp /> Chat</button>}
 
         <p className={styles.createDate}>
           <BiCalendar style={{ fontSize: '20px', marginRight: '5px' }} />Create at: {new Date(profile.create_time).toDateString()}

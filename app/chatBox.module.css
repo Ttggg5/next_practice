@@ -5,15 +5,18 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow: auto;
 }
 
 .historyWrapper {
   width: 100%;
-  height: 100%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
+  padding: 20px 0;
+  transition: all 0.3s;
 }
 
 .msgBlock {
@@ -22,11 +25,15 @@
   padding: 5px 10px;
   border-radius: 10px;
   align-self: flex-start;
+  word-break: break-word;
+  margin-right: 20px;
 }
 
 .mineMsgBlock {
   background: var(--main);
   align-self: flex-end;
+  margin-right: 0;
+  margin-left: 20px;
 }
 
 .inputWrapper {
