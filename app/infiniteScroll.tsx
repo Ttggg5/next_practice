@@ -13,7 +13,7 @@ export interface InfiniteScrollProps<T extends { id: string }> {
 export default function InfiniteScroll<T extends { id: string }>({
   fetchContent,
   renderItem,
-  rootMargin = '300px'
+  rootMargin = '500px'
 }: InfiniteScrollProps<T>) {
   const [items, setItems] = useState<T[]>([]);
   const [page, setPage] = useState(1);

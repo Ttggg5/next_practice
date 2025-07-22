@@ -177,7 +177,7 @@ export default function Page() {
       {showChatbox && (
         <div style={{ position: 'fixed', top: 0, left: 0, background: '#0000008b', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => {setShowChatbox(false); document.documentElement.style.overflow = '';}}>
           <div style={{ background: 'var(--background-hover)', maxWidth: '500px', width: '90%', height: '75vh', borderRadius: '10px', padding: '10px' }} onClick={(e) => e.stopPropagation()}>
-            <ChatBox targetUser={{id: profile.id, username: profile.username} as User} />
+            <ChatBox targetUser={{id: profile.id, username: profile.username} as User} onClose={() => setShowChatbox(false)} />
           </div>
         </div>
         )}

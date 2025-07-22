@@ -7,6 +7,16 @@ import InfiniteScroll from '../infiniteScroll';
 import styles from './page.module.css';
 import ChatBox from '../chatBox';
 
+export interface ChatWith {
+  id: string;
+  from_user_id: string;
+  to_user_id: string;
+  is_read: boolean;
+  last_chat: Date;
+  created_at: Date;
+  target_username: string;
+}
+
 export default function Page() {
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -23,7 +33,7 @@ export default function Page() {
 
   const fetchUsers = async (page: number) => {
     const res = await fetch(`${process.env.serverBaseUrl}/api/chat/used-chat-with?page=${page}`, { credentials: 'include' })
-    const users = await res.json() as User[];
+    const users = await res.json() as ChatWith[];
     return users
   };
 
@@ -31,23 +41,34 @@ export default function Page() {
     <>
       {
         curLogin?.isLoggedIn && (
-          <div className={styles.wrapper}>
-            <InfiniteScroll<User>
-              fetchContent={fetchUsers}
-              renderItem={(u) => {
-                return (
-                  <div className={selectedUser?.id === u.id ? `${styles.userBlock} ${styles.selected}` : styles.userBlock} key={u.id} onClick={() => setSelectedUser(u)} >
-                    <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${u.id}`}/>
-                    <div>
-                      <strong>{u.username}</strong>
-                      <small>{u.id}</small>
-                    </div>
-                  </div>
-                );
-              }}
-            />
+          <div className={styles.wrapper} style={selectedUser ? {} : { gridTemplateColumns: '1fr' }}>
+            <div>
+              <InfiniteScroll<ChatWith>
+                fetchContent={fetchUsers}
+                renderItem={(cw) => {
+                  return (
+                    <div 
+                      key={cw.to_user_id}
+                      className={selectedUser?.id === cw.id ? `${styles.userBlock} ${styles.selected}` : styles.userBlock}
+                      onClick={() => {
+                        setSelectedUser({ id: cw.to_user_id, username: cw.target_username} as User);
+                        cw.is_read = true;
+                      }}>
+                      <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${cw.to_user_id}`}/>
 
-            {selectedUser && <ChatBox key={selectedUser.id} targetUser={selectedUser} />}
+                      <div>
+                        <strong>{cw.target_username}</strong>
+                        <small>{cw.to_user_id}</small>
+                      </div>
+
+                      {!cw.is_read && <p className={styles.dot}></p>}
+                    </div>
+                  );
+                }}
+              />
+            </div>
+
+            {selectedUser && <ChatBox key={selectedUser.id} targetUser={selectedUser} onClose={() => setSelectedUser(null)} />}
           </div>
         )
       }

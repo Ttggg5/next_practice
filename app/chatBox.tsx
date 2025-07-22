@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import socket from '@/lib/socket';
 import styles from './chatBox.module.css';
-import { IoSend } from "react-icons/io5";
+import { IoSend, IoClose } from "react-icons/io5";
 import { User } from './userBlock';
 import { MeRespon } from './postBlock';
 
@@ -15,7 +15,7 @@ export interface Message {
   created_at: Date;
 }
 
-export default function ChatBox({ targetUser }: { targetUser: User }) {
+export default function ChatBox({ targetUser, onClose }: { targetUser: User, onClose?: () => void }) {
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -31,13 +31,19 @@ export default function ChatBox({ targetUser }: { targetUser: User }) {
       .then((data: MeRespon) => setCurLogin(data));
   }, []);
 
-  // Load messages when targetUser or curLogin changes
+  // Set all messages to read
+  const allMessageRead = () => {
+    fetch(`${process.env.serverBaseUrl}/api/chat/read`, { 
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ targetUserId: targetUser.id })
+    });
+  };
+
   useEffect(() => {
     if (!curLogin || !targetUser) return;
-
-    setMessages([]);
-    setPage(1);
-    setHasMore(true);
+    allMessageRead();
   }, [curLogin, targetUser]);
 
   // Fetch paged messages
@@ -80,6 +86,10 @@ export default function ChatBox({ targetUser }: { targetUser: User }) {
   useEffect(() => {
     if (!curLogin || !targetUser) return;
 
+    setMessages([]);
+    setPage(1);
+    setHasMore(true);
+
     fetchMessages(1)
       .then(() => {
         const el = historyRef.current;
@@ -95,18 +105,15 @@ export default function ChatBox({ targetUser }: { targetUser: User }) {
 
   // Socket
   useEffect(() => {
-    socket.connect();
-    socket.emit('register', curLogin?.userId);
-
     const handleReceiveMessage = (msg: Message) => {
       setMessages(prev => [...prev, msg]);
       scrollToBottom();
+      allMessageRead();
     };
     socket.on('receive-message', handleReceiveMessage);
 
     return () => {
       socket.off('receive-message', handleReceiveMessage);
-      socket.disconnect();
     };
   }, [curLogin?.userId]);
 
@@ -136,7 +143,10 @@ export default function ChatBox({ targetUser }: { targetUser: User }) {
 
   return (
     <div className={styles.wrapper}>
-      <h3>Chat with {targetUser.id}</h3>
+      <div className={styles.header}>
+        <h3>Chat with {targetUser.id}</h3>
+        <button className={styles.closeBtn} onClick={onClose}><IoClose /></button>
+      </div>
 
       <div className={styles.historyWrapper} ref={historyRef}>
         {messages.map((msg, i) => (

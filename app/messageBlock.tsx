@@ -31,7 +31,7 @@ export default function MessageContainer() {
               }[msg.type]
             }}
           >
-            {msg.text}
+            <p>{msg.text}</p>
             <button className={styles.removeBtn} onClick={() => removeMessage(msg.id)}>X</button>
           </motion.div>
         ))}

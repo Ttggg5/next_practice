@@ -15,10 +15,14 @@
   position: relative;
   padding: 10px 20px;
   border-radius: 100px;
-  min-width: 240px;
+  width: 300px;
   transition: all 0.3s;
   justify-content: space-between;
   align-items: center;
+}
+
+.messageBlock {
+  word-break: break-word;
 }
 
 .removeBtn {

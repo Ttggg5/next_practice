@@ -33,6 +33,8 @@ export default function PageNavBar() {
   const [selected, setSelected] = useState<Pages>(Pages.others);
   const pathname = usePathname();
 
+  const [notificationRead, setNotificationRead] = useState<boolean>(true);
+
   useEffect(() => {
     fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
       .then(async (res) => {
@@ -67,16 +69,31 @@ export default function PageNavBar() {
     socket.emit('register', curLogin?.userId);
 
     const handleReceiveNotification = (noti: Notif) => {
-      const action = noti.verb === UserAction.posted ? 'post someting' : 'comment the post';
+      const action = noti.verb === UserAction.posted ? 'post someting.' : 'comment the post.';
       addMessage(`${noti.actor_id} ${action}`, MessageType.info);
+      setNotificationRead(false);
     };
     socket.on('notification', handleReceiveNotification);
+    socket.on('message-noti', (noti: { from_user_id: string }) => {
+      addMessage(`${noti.from_user_id} send a message to you.`, MessageType.info);
+    });
 
     return () => {
       socket.off('notification', handleReceiveNotification);
       socket.disconnect();
     };
   }, [curLogin]);
+
+  useEffect(() => {
+    if (!curLogin?.isLoggedIn) return;
+
+    fetch(`${process.env.serverBaseUrl}/api/notifications/unread-count`, { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data: { count: number}) => {
+        if (data.count > 0) setNotificationRead(false);
+        else setNotificationRead(true);
+      });
+  }, [curLogin, pathname]);
 
   return (
     <nav className={styles.pageNav}>
@@ -91,7 +108,7 @@ export default function PageNavBar() {
           <div className={selected === Pages.notification ? styles.selected : ''}>
             <Link href={curLogin?.isLoggedIn ? '/notification' : '/login'}><FaBell /></Link>
           </div>
-          {/*<p className={styles.dot}></p>*/}
+          {!notificationRead && <p className={styles.dot}></p>}
         </li>
 
         <li>
