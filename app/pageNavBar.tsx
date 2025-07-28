@@ -34,6 +34,7 @@ export default function PageNavBar() {
   const pathname = usePathname();
 
   const [notificationRead, setNotificationRead] = useState<boolean>(true);
+  const [chatRead, setChatRead] = useState<boolean>(true);
 
   useEffect(() => {
     fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
@@ -76,6 +77,7 @@ export default function PageNavBar() {
     socket.on('notification', handleReceiveNotification);
     socket.on('message-noti', (noti: { from_user_id: string }) => {
       addMessage(`${noti.from_user_id} send a message to you.`, MessageType.info);
+      setChatRead(false);
     });
 
     return () => {
@@ -93,6 +95,10 @@ export default function PageNavBar() {
         if (data.count > 0) setNotificationRead(false);
         else setNotificationRead(true);
       });
+
+      fetch(`${process.env.serverBaseUrl}/api/chat/any-unread`, { credentials: 'include' })
+        .then((res) => res.json())
+        .then((data: { anyUnread: boolean}) => setChatRead(!data.anyUnread));
   }, [curLogin, pathname]);
 
   return (
@@ -121,7 +127,7 @@ export default function PageNavBar() {
           <div className={selected === Pages.chat ? styles.selected : ''}>
             <Link href={curLogin?.isLoggedIn ? '/chat' : '/login'}><IoIosChatbubbles /></Link>
           </div>
-          {/*<p className={styles.dot}></p>*/}
+          {!chatRead && <p className={styles.dot}></p>}
         </li>
 
         <li className={styles.navBtn}>

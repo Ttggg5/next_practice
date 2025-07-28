@@ -44,7 +44,7 @@ export default function Page() {
     <>
       {curLogin?.isLoggedIn && (
         <>
-          <button className={styles.readALlBtn} onClick={readAll}>Read all</button>
+          <button className={styles.readAllBtn} onClick={readAll}>Read all</button>
 
           <InfiniteScroll<Notif>
             key={key}

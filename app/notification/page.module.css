@@ -1,4 +1,4 @@
-.readALlBtn {
+.readAllBtn {
   background: var(--foreground);
   color: var(--background);
   border-radius: 100px;
@@ -8,8 +8,9 @@
   border: none;
   cursor: pointer;
   align-self: end;
+  margin-bottom: 10px;
 }
 
-.readALlBtn:hover {
+.readAllBtn:hover {
   background: var(--foreground-hover);
 }

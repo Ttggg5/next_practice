@@ -1,11 +1,21 @@
-.wrap {
-  padding: .75rem 0;
+.block {
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.block:hover {
+  background: var(--background-hover);
+}
+
+.wrapper {
+  padding: 0 0 10px 0;
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-.wrap small {
+.wrapper small {
   display: block;
   font-size: .75rem;
   color: gray;

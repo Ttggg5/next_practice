@@ -165,3 +165,43 @@
 .newInput button {
   padding: .4rem .8rem;
 }
+
+.editModal {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #00000080;
+}
+
+.editModal > div {
+  display: flex;
+  flex-direction: column;
+  background: var(--background-hover);
+  border-radius: 10px;
+  padding: 10px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80%;
+}
+
+.editModal > div > button {
+  align-self: flex-end;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s;
+  
+}
+
+.editModal > div > button:hover {
+  background: var(--foreground-hover);
+}

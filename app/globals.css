@@ -47,16 +47,6 @@ a {
   }
 }
 
-.loader {
-  width: 30px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 5px solid;
-  border-color: #767676b2 transparent;
-  animation: l1 1s infinite;
-}
-@keyframes l1 {to{transform: rotate(.5turn)}}
-
 header {
   display: flex;
   position: fixed;

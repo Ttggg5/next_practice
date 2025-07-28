@@ -48,17 +48,17 @@ export default function Page() {
                 renderItem={(cw) => {
                   return (
                     <div 
-                      key={cw.to_user_id}
+                      key={cw.id}
                       className={selectedUser?.id === cw.id ? `${styles.userBlock} ${styles.selected}` : styles.userBlock}
                       onClick={() => {
-                        setSelectedUser({ id: cw.to_user_id, username: cw.target_username} as User);
+                        setSelectedUser({ id: cw.from_user_id, username: cw.target_username} as User);
                         cw.is_read = true;
                       }}>
-                      <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${cw.to_user_id}`}/>
+                      <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${cw.from_user_id}`}/>
 
                       <div>
                         <strong>{cw.target_username}</strong>
-                        <small>{cw.to_user_id}</small>
+                        <small>{cw.from_user_id}</small>
                       </div>
 
                       {!cw.is_read && <p className={styles.dot}></p>}

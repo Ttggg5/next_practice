@@ -7,10 +7,12 @@ import { useEffect, useState } from 'react';
 import LazyVideo from './lazyVideo';
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
 import PostOptions from './postOptions';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import CommentButton from './commentButton';
 import Loading from './loading';
+import PostMaker from './postMaker';
 
 export interface MeRespon {
   isLoggedIn: boolean;
@@ -57,6 +59,7 @@ export default function PostBlock({
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadingMedia, setLoadingMedia] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const addMessage = useMessageStore((state) => state.addMessage);
 
@@ -94,7 +97,7 @@ export default function PostBlock({
   const options = curLogin?.userId === post.user_id ?
     [
       { label: 'Copy link', onClick: copyLink },
-      { label: 'Edit post', onClick: () => { } },
+      { label: 'Edit post', onClick: () => setShowEditModal(true) },
       { label: 'Delete', onClick: deletePost, danger: true }
     ]
     : [{ label: 'Copy link', onClick: copyLink }]
@@ -277,6 +280,15 @@ export default function PostBlock({
         />
         <LikeButton isUserLogin={curLogin?.isLoggedIn ? true : false} count={post.like_count} postId={post.id}></LikeButton>
       </div>
+
+      {showEditModal && (
+        <div className={styles.editModal}>
+          <div>
+            <button onClick={() => setShowEditModal(false)}><IoClose /></button>
+            <PostMaker postId={post.id}/>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
