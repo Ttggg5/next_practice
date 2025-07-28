@@ -117,15 +117,20 @@ export default function PostBlock({
       });
   }, []);
 
+  useEffect(() => {
+    if (showEditModal || showModal)
+      document.documentElement.style.overflow = 'hidden';
+    else
+      document.documentElement.style.overflow = '';
+  }, [showEditModal, showModal]);
+
   const openViewer = (index: number) => {
-    document.documentElement.style.overflow = 'hidden';
     setCurrentIndex(index);
     setLoadingMedia(true);
     setShowModal(true);
   };
 
   const closeViewer = () => {
-    document.documentElement.style.overflow = '';
     setLoadingMedia(false);
     setShowModal(false);
   };

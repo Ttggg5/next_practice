@@ -54,7 +54,10 @@ export default function PostMaker({ postId }: { postId?: string }) {
 
       fetch(`${process.env.serverBaseUrl}/api/posts/${postId}/media`, { credentials: 'include' })
         .then((res) => res.json())
-        .then((data: {urls: string[]}) => setServerMedia(data.urls.map((url) => `${process.env.serverBaseUrl}${url}`)));
+        .then((data: {urls: string[]}) => {
+          if (data.urls)
+            setServerMedia(data.urls.map((url) => `${process.env.serverBaseUrl}${url}`));
+        });
     }
   }, [curLogin]);
 
