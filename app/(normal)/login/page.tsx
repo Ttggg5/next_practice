@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import styles from "./page.module.css";
 import Link from 'next/link';
 import { useMessageStore, MessageType } from '@/store/useMessageStore';
-import { MeRespon } from '../postBlock';
+import { MeRespon } from '@/app/postBlock';
+import Loading from '@/app/loading';
 
 export default function Page() {
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);
@@ -53,9 +54,10 @@ export default function Page() {
           handleLogin()
             .then(() => setBtnDisabled(false));
         }} className={styles.form}>
+          <h2>Login</h2>
           <input type="email" placeholder="Email" onChange={e => setLoginInfo({ ...loginInfo, email: e.target.value })} required />
           <input type="password" placeholder="Password" onChange={e => setLoginInfo({ ...loginInfo, password: e.target.value })} required />
-          <button type="submit" disabled={btnDisabled} className={styles.submitBtn}>Login</button>
+          <button type="submit" disabled={btnDisabled} className='submitBtn'>{btnDisabled && <Loading width={20}/>}Login</button>
           <div className={styles.links}>
             <Link href='/forgot-password'>Forgot password</Link>
             <Link href='/register'>Register</Link>

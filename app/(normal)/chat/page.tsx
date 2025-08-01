@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { MeRespon } from '../postBlock';
-import { User } from '../userBlock';
-import InfiniteScroll from '../infiniteScroll';
+import { MeRespon } from '@/app/postBlock';
+import { User } from '@/app/userBlock';
+import InfiniteScroll from '@/app/infiniteScroll';
 import styles from './page.module.css';
-import ChatBox from '../chatBox';
+import ChatBox from '@/app/chatBox';
 
 export interface ChatWith {
   id: string;

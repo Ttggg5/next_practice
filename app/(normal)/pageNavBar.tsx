@@ -11,7 +11,7 @@ import { IoIosChatbubbles } from "react-icons/io";
 import { IoPerson } from "react-icons/io5";
 import socket from '@/lib/socket';
 import { useMessageStore, MessageType } from '@/store/useMessageStore';
-import { Notif, UserAction } from './notificationBlock';
+import { Notif, UserAction } from '@/app/notificationBlock';
 
 interface Respon {
   isLoggedIn: boolean,

@@ -103,3 +103,26 @@ svg {
 ::-webkit-scrollbar-track {
   box-shadow: transparent;
 }
+
+.submitBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  background: var(--main);
+  border: none;
+  height: 30px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.submitBtn:hover {
+  background: var(--main-hover);
+}
+
+.submitBtn:disabled {
+  background: gray;
+  cursor: default;
+}

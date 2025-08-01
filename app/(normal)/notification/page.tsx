@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from '@/app/infiniteScroll';
 import NotificationBlock, { Notif } from '@/app/notificationBlock';
 import styles from './page.module.css';
-import { MeRespon } from '../postBlock';
+import { MeRespon } from '@/app/postBlock';
 
 export default function Page() {
   const [curLogin, setCurLogin] = useState<MeRespon | null>(null);

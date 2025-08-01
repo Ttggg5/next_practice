@@ -1,7 +1,7 @@
 'use client'
 
-import InfiniteScroll from './infiniteScroll';
-import PostBlock, { MeRespon, Post } from './postBlock';
+import InfiniteScroll from '@/app/infiniteScroll';
+import PostBlock, { MeRespon, Post } from '@/app/postBlock';
 import { useEffect, useState } from 'react';
 
 const fetchNewestPosts = async (page: number) => {

@@ -5,6 +5,10 @@
   margin-top: 20%;
 }
 
+.form h2 {
+  margin-bottom: 20px;
+}
+
 .form input {
   padding: 5px;
   height: 30px;
@@ -19,23 +23,6 @@
 .form input:focus {
   outline: none;
   border-bottom: 1px solid var(--foreground-hover);
-}
-
-.submitBtn {
-  margin-top: 40px;
-  background: var(--main);
-  border: none;
-  height: 30px;
-  border-radius: 100px;
-  cursor: pointer;
-}
-
-.submitBtn:hover {
-  background: var(--main-hover);
-}
-
-.submitBtn:disabled {
-  background: gray;
 }
 
 .links {

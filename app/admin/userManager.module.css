@@ -1,0 +1,75 @@
+.searchBar {
+  border: none;
+  border-radius: 100px;
+  background: var(--foreground);
+  color: var(--background);
+  width: 90%;
+  max-width: 300px;
+  padding: 5px 10px;
+  margin-top: 10px;
+}
+
+.searchBar:focus {
+  outline: none;
+  background: var(--foreground-hover);
+}
+
+.columnHead {
+  display: grid;
+  grid-template-columns: 3fr 3fr 3fr 1fr 1.5fr;
+  background: var(--main);
+  color: #414141;
+  border-radius: 100px;
+  padding: 2px 10px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.userInfo {
+  display: grid;
+  grid-template-columns: 3fr 3fr 3fr 1fr 1.5fr;
+  padding: 2px 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.userInfo:hover {
+  background: var(--background-hover);
+}
+
+.userInfo > div {
+  overflow-x: auto;
+  align-self: center;
+  padding: 5px;
+}
+
+.suspendBtn:hover {
+  background: var(--foreground-hover);
+}
+
+.deleteBtn:hover {
+  background: indianred;
+  color: white;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 100px;
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 2px 10px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

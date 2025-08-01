@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import PageNavBar from "./pageNavBar";
-import Title from "./title";
-import SearchBar from "./searchBar";
-import MessageBlock from "./messageBlock";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,15 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <header>
-          <Title></Title>
-          <MessageBlock></MessageBlock>
-          <SearchBar></SearchBar>
-        </header>
-        <div className="page">
-          {children}
-        </div>
-        <PageNavBar></PageNavBar>
+        {children}
       </body>
     </html>
   );

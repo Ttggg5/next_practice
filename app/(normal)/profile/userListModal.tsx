@@ -3,9 +3,9 @@
 import styles from './userListModal.module.css';
 import { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { MeRespon } from '../postBlock';
-import UserBlock, { User } from '../userBlock';
-import InfiniteScroll from '../infiniteScroll';
+import { MeRespon } from '../../postBlock';
+import UserBlock, { User } from '../../userBlock';
+import InfiniteScroll from '../../infiniteScroll';
 
 
 interface Props {
