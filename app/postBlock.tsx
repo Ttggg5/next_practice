@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import styles from './postBlock.module.css';
 import LikeButton from './likeButton';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LazyVideo from './lazyVideo';
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa6";
@@ -13,6 +13,8 @@ import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import CommentButton from './commentButton';
 import Loading from './loading';
 import PostMaker from './postMaker';
+import { constrainedMemory } from 'process';
+import { VscFoldUp, VscFoldDown  } from "react-icons/vsc";
 
 export interface MeRespon {
   isLoggedIn: boolean;
@@ -60,6 +62,9 @@ export default function PostBlock({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadingMedia, setLoadingMedia] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [foldButton, setFoldButton] = useState(false);
+  const [foldContent, setFoldContent] = useState(false);
+  const contentRef = useRef<HTMLParagraphElement | null>(null);
 
   const addMessage = useMessageStore((state) => state.addMessage);
 
@@ -124,6 +129,13 @@ export default function PostBlock({
       document.documentElement.style.overflow = '';
   }, [showEditModal, showModal]);
 
+  useEffect(() => {
+    if ((contentRef.current?.offsetHeight ?? 0) > 200) {
+      setFoldButton(true);
+      setFoldContent(true);
+    }
+  }, []);
+
   const openViewer = (index: number) => {
     setCurrentIndex(index);
     setLoadingMedia(true);
@@ -159,7 +171,16 @@ export default function PostBlock({
         </Link>
       </div>
 
-      <p>{post.content}</p>
+      <p ref={contentRef} className={foldContent ? styles.fold : ''}>{post.content}</p>
+      {foldButton && 
+        <button className={styles.foldBtn} onClick={(e) => {
+          if (foldContent)
+            e.currentTarget.innerHTML = 'Fold content';
+          else
+            e.currentTarget.innerHTML = 'Read all';
+          setFoldContent(!foldContent);
+        }}>Read all</button>
+      }
 
       <div className={styles.mediaContainer}>
         {mediaPaths.length > 0 && (() => {

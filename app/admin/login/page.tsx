@@ -28,18 +28,18 @@ export default function Page() {
   }, []);
 
   const handleLogin = async () => {
-    const res = await fetch(`${process.env.serverBaseUrl}/api/admin/auth/supervisor-login`, {
+    const res = await fetch(`${process.env.serverBaseUrl}/api/admin/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include', // 🔐 important
       body: JSON.stringify(loginInfo),
     });
     const data = await res.json();
-    if (!data.userId) {
+    if (!data.success) {
       addMessage(data.message, MessageType.error);
     }
     else {
-      addMessage(data.message, MessageType.success);
+      addMessage('Login success', MessageType.success);
       window.location.href = './';
     }
   };

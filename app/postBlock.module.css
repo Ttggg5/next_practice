@@ -15,6 +15,27 @@
 .post > p {
   margin: 10px 30px 0 30px;
   overflow-wrap: break-word;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+
+.fold {
+  height: 200;
+}
+
+.foldBtn {
+  background: var(--background);
+  border: none;
+  text-align: start;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--main);
+  margin: 10px 30px 0 30px;
+  font-size: 16px;
+}
+
+.foldBtn:hover {
+  color: var(--main-hover);
 }
 
 .postUser {

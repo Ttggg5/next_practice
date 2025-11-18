@@ -140,15 +140,17 @@ export default function UserManager() {
             <div>{user.username}</div>
             <div>{user.email}</div>
             <div>{user.role}</div>
-            <div className={styles.actions}>
-              <button className={`${styles.btn} ${styles.suspendBtn}`} style={user.is_suspended ? {background: 'var(--main)'} : {}} onClick={() => toggleSuspend(user)}>
-                <MdBlock />{user.is_suspended ? 'Unsuspend' : 'Suspend'}
-              </button>
-              <button className={`${styles.btn} ${styles.deleteBtn}`} onClick={() => {
-                if (confirm(`Sure you want to delete "${user.id}"`))
-                  deleteUser(user.id);
-              }}><FaTrash/>Delete</button>
-            </div>
+            {user.role == 'user' &&
+              <div className={styles.actions}>
+                <button className={`${styles.btn} ${styles.suspendBtn}`} style={user.is_suspended ? {background: 'var(--main)'} : {}} onClick={() => toggleSuspend(user)}>
+                  <MdBlock />{user.is_suspended ? 'Unsuspend' : 'Suspend'}
+                </button>
+                <button className={`${styles.btn} ${styles.deleteBtn}`} onClick={() => {
+                  if (confirm(`Sure you want to delete "${user.id}"`))
+                    deleteUser(user.id);
+                }}><FaTrash/>Delete</button>
+              </div>
+            }
           </div>
         ))}
 

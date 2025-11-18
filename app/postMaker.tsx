@@ -131,7 +131,7 @@ export default function PostMaker({ postId }: { postId?: string }) {
               className={styles.content}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows={6}
+              rows={10}
               placeholder="Write something..."
             />
             <div className={styles.fileInputs}>
