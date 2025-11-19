@@ -13,8 +13,7 @@ import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import CommentButton from './commentButton';
 import Loading from './loading';
 import PostMaker from './postMaker';
-import { constrainedMemory } from 'process';
-import { VscFoldUp, VscFoldDown  } from "react-icons/vsc";
+import Image from 'next/image';
 
 export interface MeRespon {
   isLoggedIn: boolean;
@@ -65,6 +64,7 @@ export default function PostBlock({
   const [foldButton, setFoldButton] = useState(false);
   const [foldContent, setFoldContent] = useState(false);
   const contentRef = useRef<HTMLParagraphElement | null>(null);
+  const [updateTime, setUpdateTime] = useState<Date>(new Date(0));
 
   const addMessage = useMessageStore((state) => state.addMessage);
 
@@ -136,6 +136,12 @@ export default function PostBlock({
     }
   }, []);
 
+  useEffect(() => {
+    fetch(`${process.env.serverBaseUrl}/api/profile/update-time/${post.user_id}`, { credentials: 'include' })
+      .then((respon) => respon.json())
+      .then((ut) => setUpdateTime(ut.update_at));
+  }, []);
+
   const openViewer = (index: number) => {
     setCurrentIndex(index);
     setLoadingMedia(true);
@@ -164,7 +170,7 @@ export default function PostBlock({
       </div>
 
       <div className={styles.postUser}>
-        <img alt="avatar" src={`${process.env.serverBaseUrl}/api/profile/avatar/${post.user_id}`}></img>
+        <img alt="avatar" src={`${process.env.serverBaseUrl}/api/profile/avatar/${post.user_id}?${updateTime.valueOf()}`}/>
         <Link href={`/profile/${post.user_id}`}>
           <strong>{post.username}</strong>
           <small>{post.user_id}</small>
@@ -194,10 +200,13 @@ export default function PostBlock({
             const media = mediaList[0];
 
             return isImage(media) ? (
-              <img
+              <Image
                 src={fullUrl}
+                width={0}
+                height={0}
+                sizes='100%'
                 alt="single"
-                style={{ maxHeight: '80vh', maxWidth: '100%', borderRadius: '10px', cursor: 'pointer' }}
+                style={{ height: 'auto', maxHeight: '80vh', width: 'auto', maxWidth: '100%', borderRadius: '10px', cursor: 'pointer' }}
                 onClick={() => openViewer(0)}
               />
             ) : (
@@ -219,7 +228,7 @@ export default function PostBlock({
                     onClick={() => openViewer(index)}
                   >
                     {isImage(media) ? (
-                      <img src={fullUrl} alt={`media-${index}`} />
+                      <Image src={fullUrl} alt={`media-${index}`} width={500} height={500}/>
                     ) : (
                       <>
                         <video src={fullUrl} preload="metadata" muted />
@@ -259,10 +268,13 @@ export default function PostBlock({
 
             {/* Actual media preview */}
             {isImage(mediaPaths[currentIndex]) ? (
-              <img
+              <Image
                 src={`${process.env.serverBaseUrl}${mediaPaths[currentIndex]}`}
                 alt='modal-img'
-                style={{ maxHeight: '100vh', maxWidth: '90%', borderRadius: '10px' }}
+                width={0}
+                height={0}
+                sizes='100%'
+                style={{ height: 'auto',  maxHeight: '100vh', width: 'auto', maxWidth: '90%', borderRadius: '10px' }}
                 onLoad={() => setLoadingMedia(false)}
               />
             ) : (
@@ -303,6 +315,7 @@ export default function PostBlock({
           postId={post.id}
           count={post.comment_count}
           curLogin={curLogin}
+          postUserUpdateTime={updateTime}
         />
         <LikeButton isUserLogin={curLogin?.isLoggedIn ? true : false} count={post.like_count} postId={post.id}></LikeButton>
       </div>

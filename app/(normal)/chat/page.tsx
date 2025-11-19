@@ -6,6 +6,7 @@ import { User } from '@/app/userBlock';
 import InfiniteScroll from '@/app/infiniteScroll';
 import styles from './page.module.css';
 import ChatBox from '@/app/chatBox';
+import Image from 'next/image';
 
 export interface ChatWith {
   id: string;
@@ -49,12 +50,12 @@ export default function Page() {
                   return (
                     <div 
                       key={cw.id}
-                      className={selectedUser?.id === cw.id ? `${styles.userBlock} ${styles.selected}` : styles.userBlock}
+                      className={selectedUser?.id === cw.from_user_id ? `${styles.userBlock} ${styles.selected}` : styles.userBlock}
                       onClick={() => {
                         setSelectedUser({ id: cw.from_user_id, username: cw.target_username} as User);
                         cw.is_read = true;
                       }}>
-                      <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${cw.from_user_id}`}/>
+                      <Image src={`${process.env.serverBaseUrl}/api/profile/avatar/${cw.from_user_id}`} alt='Avatar' height={40} width={40}/>
 
                       <div>
                         <strong>{cw.target_username}</strong>

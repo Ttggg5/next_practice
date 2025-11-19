@@ -13,9 +13,10 @@ interface Props {
   postId: string;
   count: number;
   curLogin: MeRespon | null;
+  postUserUpdateTime: Date;
 }
 
-export default function CommentButton({ postId, count, curLogin }: Props) {
+export default function CommentButton({ postId, count, curLogin, postUserUpdateTime }: Props) {
   const [open, setOpen] = useState(false);
   const [cmtCount, setCmtCount] = useState(count);
   const [newText, setNewText] = useState('');
@@ -81,7 +82,7 @@ export default function CommentButton({ postId, count, curLogin }: Props) {
               <InfiniteScroll<Comment>
                 key={`comments-${postId}-${cmtCount}`} // remount on refresh
                 fetchContent={fetchComments}
-                renderItem={(c, idx, onItemDeleted) => <CommentBlock key={c.id} comment={c} currentUserId={curLogin?.userId} onDeleted={() => {
+                renderItem={(c, idx, onItemDeleted) => <CommentBlock key={c.id} comment={c} currentUserId={curLogin?.userId} userUpdateTime={postUserUpdateTime} onDeleted={() => {
                   onItemDeleted(c.id);
                   setCmtCount((prev) => prev - 1);
                 }}/>}

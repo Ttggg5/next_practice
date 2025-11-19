@@ -25,6 +25,7 @@ export default function Page() {
 	return (
 		<>
 			<h2>Admin home</h2>
+      <h3>Hello {curLogin?.userId}!</h3>
 			<br/>
 			<Link href='./admin/users'><FaUser /> Users</Link>
 		</>

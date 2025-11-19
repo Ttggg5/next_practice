@@ -51,7 +51,7 @@ export default function ChatBox({ targetUser, onClose }: { targetUser: User, onC
     if (!curLogin || !hasMore || isLoadingRef.current) return;
     isLoadingRef.current = true;
 
-    const res = await fetch(`${process.env.serverBaseUrl}/api/chat/history/${targetUser.id}?page=${pageNum}`, { credentials: 'include' });
+    const res = await fetch(`${process.env.serverBaseUrl}/api/chat/history/${targetUser.id}?page=${pageNum}&limit=50`, { credentials: 'include' });
     const newMsgs = (await res.json() as Message[]).reverse();
     
     if (newMsgs.length === 0) setHasMore(false);
@@ -149,6 +149,7 @@ export default function ChatBox({ targetUser, onClose }: { targetUser: User, onC
       </div>
 
       <div className={styles.historyWrapper} ref={historyRef}>
+        <div></div>
         {messages.map((msg, i) => (
           <div key={i} className={msg.from_user_id === curLogin?.userId ? `${styles.msgBlock} ${styles.mineMsgBlock}` : styles.msgBlock}>
             <span>{msg.content}</span>

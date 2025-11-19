@@ -16,13 +16,14 @@ export interface Comment {
 interface Props {
   comment: Comment | null;
   currentUserId?: string;
+  userUpdateTime: Date;
   onDeleted?: (id: string) => void;
 }
 
-export default function CommentBlock({ comment, currentUserId, onDeleted }: Props) {
+export default function CommentBlock({ comment, currentUserId, userUpdateTime, onDeleted }: Props) {
   const addMessage = useMessageStore((state) => state.addMessage);
   
-  if (!comment) return <>Comment not found!</>;
+  if (!comment) return (<>Comment not found!</>);
   const isOwner = currentUserId === comment.user_id;
 
   const handleDelete = async () => {
@@ -41,7 +42,7 @@ export default function CommentBlock({ comment, currentUserId, onDeleted }: Prop
     <div className={styles.wrapper}>
       <img
         className={styles.avatar}
-        src={`${process.env.serverBaseUrl}/api/profile/avatar/${comment.user_id}`}
+        src={`${process.env.serverBaseUrl}/api/profile/avatar/${comment.user_id}?${userUpdateTime.valueOf()}`}
         alt="avatar"
       />
 

@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 import os from 'os';
 
+let port = '5000';
 let address = '';
 const networkInterfaces = os.networkInterfaces();
 for (const interfaceName in networkInterfaces) {
@@ -14,10 +15,21 @@ for (const interfaceName in networkInterfaces) {
 
 const nextConfig: NextConfig = {
   env: {
-    serverPort: '5000',
-    serverBaseUrl: `http://${address}:5000`,
+    serverPort: port,
+    serverBaseUrl: `http://${address}:${port}`,
   },
   allowedDevOrigins: [address],
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: address,
+        port: port,
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

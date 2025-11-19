@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import styles from './notificationBlock.module.css';
+import { useEffect, useState } from 'react';
 
 export enum UserAction{
   posted = 'posted',
@@ -21,6 +22,8 @@ export interface Notif {
 }
 
 export default function NotificationBlock({ notif }: { notif: Notif }) {
+  const [updateTime, setUpdateTime] = useState<Date>(new Date(0));
+
   const handleRead = () => {
     fetch(`${process.env.serverBaseUrl}/api/notifications/mark-read`, {
       method: 'PUT',
@@ -30,13 +33,19 @@ export default function NotificationBlock({ notif }: { notif: Notif }) {
     });
   };
 
+  useEffect(() => {
+    fetch(`${process.env.serverBaseUrl}/api/profile/update-time/${notif.actor_id}`, { credentials: 'include' })
+      .then((respon) => respon.json())
+      .then((ut) => setUpdateTime(ut.update_at));
+  }, []);
+
   return (
     <Link 
       className={notif.is_read ? `${styles.read} ${styles.block}` : styles.block}
       href={notif.comment_id ? `/post/${notif.post_id}?cId=${notif.comment_id}` : `/post/${notif.post_id}`}
       onClick={handleRead}>
       <div className={styles.wrapper}>
-        <img className={styles.avatar} alt="avatar" src={`${process.env.serverBaseUrl}/api/profile/avatar/${notif.actor_id}`}></img>
+        <img className={styles.avatar} alt="avatar" src={`${process.env.serverBaseUrl}/api/profile/avatar/${notif.actor_id}?${updateTime.valueOf()}`} />
 
         <div className={styles.userInfo}>
           <strong>{notif.actor_name}</strong>

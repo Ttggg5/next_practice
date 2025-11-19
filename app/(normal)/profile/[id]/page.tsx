@@ -22,6 +22,7 @@ export interface Profile {
   username: string;
   email: string;
   create_time: Date;
+  update_at: Date;
   bio?: string;
 }
 
@@ -127,7 +128,7 @@ export default function Page() {
     <>
       <div className={styles.profile}>
         <div className={styles.avatarNameContainer}>
-          <img className={styles.avatar} src={`${process.env.serverBaseUrl}/api/profile/avatar/${userId}`} alt="avatar" />
+          <img className={styles.avatar} src={`${process.env.serverBaseUrl}/api/profile/avatar/${userId}?${profile.update_at.valueOf()}`} alt="avatar" />
           <div className={styles.infoContainer}>
             <h1>{profile.username}</h1>
             <p>{profile.id}</p>

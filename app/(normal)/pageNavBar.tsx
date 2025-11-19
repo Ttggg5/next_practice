@@ -36,16 +36,19 @@ export default function PageNavBar() {
   const [notificationRead, setNotificationRead] = useState<boolean>(true);
   const [chatRead, setChatRead] = useState<boolean>(true);
 
+  const [updateTime, setUpdateTime] = useState<Date>(new Date(0));
+
   useEffect(() => {
     fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
-      .then(async (res) => {
+      .then((res) => {
         if (!res.ok)
           throw new Error('Failed to fetch user');
 
         return res.json();
       })
-      .then((data: Respon) => {
+      .then(async (data: Respon) => {
         setCurLogin(data);
+        setUpdateTime((await(await fetch(`${process.env.serverBaseUrl}/api/profile/update-time/${data.userId}`, { credentials: 'include' })).json()).update_at);
       });
   }, []);
 
@@ -133,7 +136,7 @@ export default function PageNavBar() {
         <li className={styles.navBtn}>
           <div className={selected === Pages.profile ? styles.selected : ''}>
             <Link href={curLogin?.isLoggedIn ? `/profile/${curLogin?.userId}` : "/login"}>
-              {curLogin?.isLoggedIn ? <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${curLogin?.userId}`} alt='Profile'/> : <IoPerson/>}
+              {curLogin?.isLoggedIn ? <img src={`${process.env.serverBaseUrl}/api/profile/avatar/${curLogin?.userId}?${updateTime.valueOf()}`} alt='Profile'/> : <IoPerson/>}
             </Link>
           </div>
         </li>

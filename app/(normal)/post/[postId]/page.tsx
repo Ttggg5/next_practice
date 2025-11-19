@@ -15,6 +15,8 @@ export default function Page() {
   const [post, setPost] = useState<Post | null>(null);
   const [comment, setComment] = useState<Comment | null>(null);
 
+  const [updateTime, setUpdateTime] = useState<Date>(new Date(0));
+
   useEffect(() => {
     // check login
     fetch(`${process.env.serverBaseUrl}/api/auth/me`, { credentials: 'include' })
@@ -36,6 +38,14 @@ export default function Page() {
     }
   }, []);
 
+  useEffect(() => {
+    if (comment) {
+      fetch(`${process.env.serverBaseUrl}/api/profile/update-time/${comment?.user_id}`, { credentials: 'include' })
+        .then((respon) => respon.json())
+        .then((ut) => setUpdateTime(ut.update_at));
+    }
+  }, [comment]);
+
   return (
     <>
       {post ? (
@@ -45,7 +55,7 @@ export default function Page() {
             <div style={{ width: '95%' }}>
               <h3>Comment</h3>
               <div style={{ background: 'var(--background-hover)', width: '100%', padding: '10px', borderRadius: '10px' }}>
-                <CommentBlock comment={comment} currentUserId={curLogin?.userId} />
+                <CommentBlock comment={comment} currentUserId={curLogin?.userId} userUpdateTime={updateTime} />
               </div>
             </div>
           )}

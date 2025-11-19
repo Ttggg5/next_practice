@@ -4,12 +4,12 @@ import { useState, FormEvent, useEffect } from 'react';
 import { useMessageStore, MessageType } from '@/store/useMessageStore'
 import { MeRespon, Post } from '@/app/postBlock';
 import styles from './postMaker.module.css';
-import { useRouter } from 'next/navigation';
 import { RiImageAddFill } from "react-icons/ri";
 import { BiSolidVideoPlus } from "react-icons/bi";
 import { MdOutlinePostAdd } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import Loading from './loading';
+import Image from 'next/image';
 
 interface CreateRespon {
   success: boolean;
@@ -114,7 +114,7 @@ export default function PostMaker({ postId }: { postId?: string }) {
       } else {
         addMessage(data.message, MessageType.error);
       }
-    } catch (err) {
+    } catch {
       setLoading(false);
       addMessage('Something went wrong', MessageType.error);
     }
@@ -153,7 +153,7 @@ export default function PostMaker({ postId }: { postId?: string }) {
                   }}
                 ><IoClose /></button>
                 {isImage(url) ? (
-                  <img src={url} alt={`preview-server-${index}`} />
+                  <Image src={url} alt={`preview-server-${index}`} height={300} width={300} />
                 ) : (
                   <video src={url} controls />
                 )}
@@ -176,7 +176,7 @@ export default function PostMaker({ postId }: { postId?: string }) {
                       setLocalPreviews(prev => prev.filter((_, i) => i !== index));
                     }}
                   ><IoClose /></button>
-                  {isImage && <img src={url} alt={`preview-${index}`} />}
+                  {isImage && <Image src={url} alt={`preview-${index}`} height={300} width={300} />}
                   {isVideo && <video src={url} controls />}
                 </div>
               );

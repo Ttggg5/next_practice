@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { MeRespon } from './postBlock';
 import styles from './userBlock.module.css'
 import FollowButton from './followButton';
+import { useEffect, useState } from 'react';
 
 export interface User {
   id: string;
@@ -9,11 +10,19 @@ export interface User {
 }
 
 export default function UserBlock({curLogin, user}: {curLogin: MeRespon | null, user: User}) {
+  const [updateTime, setUpdateTime] = useState<Date>(new Date(0));
+
+  useEffect(() => {
+    fetch(`${process.env.serverBaseUrl}/api/profile/update-time/${user.id}`, { credentials: 'include' })
+      .then((respon) => respon.json())
+      .then((ut) => setUpdateTime(ut.update_at));
+  }, []);
+
   return (
     <div className={styles.userItem}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <img
-          src={`${process.env.serverBaseUrl}/api/profile/avatar/${user.id}`}
+          src={`${process.env.serverBaseUrl}/api/profile/avatar/${user.id}?${updateTime.valueOf()}`}
           alt="avatar"
         />
 
