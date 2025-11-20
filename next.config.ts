@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     serverPort: port,
     serverBaseUrl: `http://${address}:${port}`,
   },
-  allowedDevOrigins: [address],
+  allowedDevOrigins: ['*'],
 
   images: {
     remotePatterns: [
