@@ -5,13 +5,15 @@ let port = '5000';
 let address = '';
 const networkInterfaces = os.networkInterfaces();
 for (const interfaceName in networkInterfaces) {
-    const addresses = networkInterfaces[interfaceName];
-    for (const addr of addresses as any) {
-      if ((addr.family === 'IPv4') && !addr.internal) {
-        address = addr.address;
-      }
+  const addresses = networkInterfaces[interfaceName];
+  for (const addr of addresses as any) {
+    if ((addr.family === 'IPv4') && !addr.internal) {
+      address = addr.address;
     }
   }
+}
+
+console.log(`Backend server address: http://${address}:${port}`);
 
 const nextConfig: NextConfig = {
   env: {
