@@ -323,7 +323,7 @@ export default function PostBlock({
       {showEditModal && (
         <div className={styles.editModal}>
           <div>
-            <button onClick={() => setShowEditModal(false)}><IoClose /></button>
+            <button className={styles.editModalCloseBtn} onClick={() => setShowEditModal(false)}><IoClose /></button>
             <PostMaker postId={post.id}/>
           </div>
         </div>

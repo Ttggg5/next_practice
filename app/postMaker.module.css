@@ -45,6 +45,7 @@
 }
 
 .preview {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 300px;
@@ -55,18 +56,17 @@
 }
 
 .cancelBtn {
-  position: relative;
-  align-self: end;
-  margin-bottom: -10px;
-  margin-right: -10px;
-  width: 20px;
-  height: 20px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 25px;
+  height: 25px;
   z-index: 100;
   border: none;
   border-radius: 50%;
   background: var(--foreground);
   color: indianred;
-  box-shadow: 3px 3px 3px #000000;
+  box-shadow: 3px 3px 3px #00000087;
   cursor: pointer;
   transition: all 0.3s;
   display: flex;

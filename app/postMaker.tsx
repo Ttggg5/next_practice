@@ -153,7 +153,7 @@ export default function PostMaker({ postId }: { postId?: string }) {
                   }}
                 ><IoClose /></button>
                 {isImage(url) ? (
-                  <Image src={url} alt={`preview-server-${index}`} height={300} width={300} />
+                  <Image src={url} alt={`preview-server-${index}`} height={0} width={280} sizes='100vh'/>
                 ) : (
                   <video src={url} controls />
                 )}
