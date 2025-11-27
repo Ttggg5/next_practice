@@ -66,11 +66,10 @@ export default function Page() {
       body: fd,
       credentials: 'include'
     });
-    setSaving(false);
 
     if (res.ok) {
       addMessage('Profile updated!', MessageType.success);
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => window.location.href = `./${me.userId}`, 1000);
     }
     else addMessage('Failed to update profile', MessageType.error);
   };
